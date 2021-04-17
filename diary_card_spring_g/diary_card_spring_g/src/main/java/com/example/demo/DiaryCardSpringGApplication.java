@@ -1,13 +1,13 @@
-package edu.launchcode.diary_card_spring;
+package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DiaryCardSpringApplication {
+public class DiaryCardSpringGApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DiaryCardSpringApplication.class, args);
+		SpringApplication.run(DiaryCardSpringGApplication.class, args);
 	}
 
 }

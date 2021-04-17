@@ -1,10 +1,10 @@
-package edu.launchcode.diary_card_spring;
+package com.example.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DiaryCardSpringApplicationTests {
+class DiaryCardSpringGApplicationTests {
 
 	@Test
 	void contextLoads() {
