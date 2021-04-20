@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import { Switch } from 'react-router-dom';
-//import { UsersList } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
-//import UsersList from '/components/user-list';
-import UsersList from 'user-list.component';
+import UsersList from './components/user-list.component';
 
 class App extends Component {
   render() {

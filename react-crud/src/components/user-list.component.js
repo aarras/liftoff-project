@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import UserDataService from "../services/users.service";
+import UserDataService from "../services/user.service";
 import { Link } from "react-router-dom";
 
 export default class UsersList extends Component {
@@ -24,7 +24,7 @@ export default class UsersList extends Component {
     }
 
     onChangeSearchLastName(e) {
-        const searchUser = e.target.value;
+        const searchLastName = e.target.value;
 
         this.setState({
             searchLastName: searchLastName
@@ -54,7 +54,7 @@ export default class UsersList extends Component {
 
     setActiveUser(user, index) {
         this.setState({
-            currentUser: tutorial,
+            currentUser: user,
             currentIndex: index
         });
     }
