@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import Page1 from './pages/page1'
-import Page2 from './pages/page2'
-import Page3 from './pages/page3'
+import Home from './pages/home'
+import Forms from './pages/forms'
+import viewLogs from './pages/viewLogs'
 import Page4 from './pages/page4'
 import Layout from './Layout'
 
@@ -10,9 +10,9 @@ export const Routes = () => {
     <Router>
       <Layout>
         <div style={{ marginTop: '100px' }}>
-          <Route path="/" exact component={Page1} />
-          <Route path="/page2" exact component={Page2} />
-          <Route path="/page3" exact component={Page3} />
+          <Route path="/" exact component={Home} />
+          <Route path="/forms" exact component={Forms} />
+          <Route path="/view_logs" exact component={viewLogs} />
           <Route path="/page4" exact component={Page4} />
         </div>
       </Layout>
