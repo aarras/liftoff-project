@@ -1,5 +1,13 @@
 import React from 'react'
+import Typography from "@material-ui/core/Typography"
+import Layout from '../Layout'
 
 export default () => {
-  return <di>Page 4</di>
+  return (
+      <Layout>
+      <div style={{ marginTop: '100px' }}>
+        <Typography variant="h4">Page 4</Typography>
+      </div>
+    </Layout>
+  )
 }

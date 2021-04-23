@@ -7,16 +7,16 @@ export const NavBar = ({ color }) => (
 <AppBar color={color}>
     <Toolbar>
         <Link to="/">
-            <Button color="lightBlue">Home</Button>
+            <Button color="primary" variant="contained">Home</Button>
         </Link>
         <Link to="/forms">
-            <Button>Forms</Button>
+            <Button color="primary" variant="contained">Forms</Button>
         </Link>
         <Link to="/view_logs">
-            <Button>View Logs</Button>
+            <Button color="primary" variant="contained">View Logs</Button>
         </Link>
         <Link to="/page4">
-            <Button>Page Four</Button>
+            <Button color="primary" variant="contained">Page Four</Button>
         </Link>
     </Toolbar>
 </AppBar>
