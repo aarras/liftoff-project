@@ -12,11 +12,8 @@ export const NavBar = ({ color }) => (
         <Link to="/forms">
             <Button color="primary" variant="contained">Forms</Button>
         </Link>
-        <Link to="/view_logs">
+        <Link to="/view-logs">
             <Button color="primary" variant="contained">View Logs</Button>
-        </Link>
-        <Link to="/page4">
-            <Button color="primary" variant="contained">Page Four</Button>
         </Link>
     </Toolbar>
 </AppBar>
