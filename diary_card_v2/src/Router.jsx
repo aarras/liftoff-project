@@ -1,20 +1,20 @@
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import Home from './pages/home'
-import Forms from './pages/forms'
+import home from './pages/home'
+import forms from './pages/forms'
 import viewLogs from './pages/viewLogs'
-import Page4 from './pages/page4'
-import SignIn from './pages/SignIn'
-import Layout from './Layout'
+import graphData from './pages/graphData'
+import signIn from './pages/signIn'
+import signUp from './pages/signUp'
 
 export const Routes = () => {
   return (
     <Router>
-      <Route path="/SignIn" exact component={SignIn} />
-      <Route path="/" exact component={Home} />
-      <Route path="/forms" exact component={Forms} />
-      <Route path="/view_logs" exact component={viewLogs} />
-      <Route path="/page4" exact component={Page4} />
+      <Route path="/sign-up" exact component={signUp} />
+      <Route path="/sign-in" exact component={signIn} />
+      <Route path="/" exact component={home} />
+      <Route path="/forms" exact component={forms} />
+      <Route path="/view-logs" exact component={viewLogs} />
+      <Route path="/graph-data" exact component={graphData} />
     </Router>
   )
 }
-
