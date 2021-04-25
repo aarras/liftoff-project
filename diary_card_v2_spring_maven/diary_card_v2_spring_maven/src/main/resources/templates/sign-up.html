@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head></head>
+<body class="container">
+
+<header>Sign Up</header>
+
+<form method="post">
+    <div class="form-group">
+        <label>First Name
+            <input class="form-control" th:field="${signUpFormDTO.firstName}" />
+        </label>
+        <p class="error" th:errors="${signUpFormDTO.firstName}"></p>
+    </div>
+    <div class="form-group">
+        <label>Last Name
+            <input class="form-control" th:field="${signUpFormDTO.lastName}" />
+        </label>
+        <p class="error" th:errors="${signUpFormDTO.lastName}"></p>
+    </div>
+    <div class="form-group">
+        <label>Email
+            <input class="form-control" th:field="${signUpFormDTO.email}" />
+        </label>
+        <p class="error" th:errors="${signUpFormDTO.email}"></p>
+    </div>
+    <div class="form-group">
+        <label>Password
+            <input class="form-control" th:field="${signUpFormDTO.password}" type="password" />
+        </label>
+        <p class="error" th:errors="${signUpFormDTO.password}"></p>
+    </div>
+    <div class="form-group">
+        <label>Verify Password
+            <input class="form-control" th:field="${signUpFormDTO.verifyPassword}" type="password" />
+        </label>
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Sign Up" />
+</form>
+
+</body>
+</html>
