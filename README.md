@@ -12,4 +12,4 @@ A Spring Boot + React application to track psychological factors and visualize t
 
 ## License
 
-[GNU General Public License v3](LICENSE)
+[GNU General Public License v3](LICENSE.txt)
