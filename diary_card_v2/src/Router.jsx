@@ -5,6 +5,7 @@ import viewLogs from './pages/viewLogs'
 import graphData from './pages/graphData'
 import signIn from './pages/signIn'
 import signUp from './pages/signUp'
+import CreateUserComponent from './components/CreateUserComponent'
 
 export const Routes = () => {
   return (
@@ -15,6 +16,7 @@ export const Routes = () => {
       <Route path="/forms" exact component={forms} />
       <Route path="/view-logs" exact component={viewLogs} />
       <Route path="/graph-data" exact component={graphData} />
+      <Route path="/add-user" component = {CreateUserComponent}></Route>
     </Router>
   )
 }
