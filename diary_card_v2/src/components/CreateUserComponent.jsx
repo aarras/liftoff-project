@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import UserService from './services/UserService';
+import { withRouter } from "react-router-dom";
 
 class CreateUserComponent extends Component {
     constructor(props) {
@@ -11,6 +13,7 @@ class CreateUserComponent extends Component {
             password: '',
             verifyPassword:''
         }
+
         this.changeFirstNameHandler = this.changeFirstNameHandler.bind(this);
         this.changeLastNameHandler = this.changeLastNameHandler.bind(this);
         this.changeEmailHandler = this.changeEmailHandler.bind(this);
@@ -22,35 +25,48 @@ class CreateUserComponent extends Component {
     saveUser = (e) => {
         e.preventDefault();
 
-        let user = {firstname: this.state.firstName, lastName: this.state.lastName, email: this.state.email,
-        password: this.state.password, verifyPassword: this.state.verifyPassword}
-        console.log('user = > ' + JSON.stringify(user));
+        let data = new FormData()
+
+        data.append('firstName', this.state.firstName);
+        data.append('lastName', this.state.lastName);
+        data.append('email', this.state.email);
+        data.append('password', this.state.password);
+        data.append('verifyPassword', this.state.verifyPassword);
+
+        UserService.createUser(data).then(res =>{
+            this.props.history.push('/login');
+        });
     }
 
     changeFirstNameHandler= (event) => {
         this.setState({firstName: event.target.value});
     }
 
-    changeFirstNameHandler= (event) => {
+    changeLastNameHandler= (event) => {
         this.setState({lastName: event.target.value});
     }
 
-    changeFirstNameHandler= (event) => {
+    changeEmailHandler= (event) => {
         this.setState({email: event.target.value});
     }
-    changeFirstNameHandler= (event) => {
+    
+    changePasswordHandler= (event) => {
         this.setState({password: event.target.value});
     }
 
-    changeFirstNameHandler= (event) => {
+    changeVerifyPasswordHandler= (event) => {
         this.setState({verifyPassword: event.target.value});
+    }
+
+    cancel(event){
+        this.props.history.push('sign-in');
     }
 
     render() {
         return (
             <div className = "container">
                 <div className = "row">
-                    <div classname = "card col-md-6 offset-md-3 offset-md-3">
+                    <div className = "card col-md-6 offset-md-3 offset-md-3 mt-5 bg-dark text-light">
                         <h3 className = "text-center">Add User</h3>
                         <div className = "card-body">
                             <form>
@@ -79,7 +95,7 @@ class CreateUserComponent extends Component {
                                     <input placeholder="Password" name="verifyPassword" className="form-control"
                                     value={this.state.verifyPassword} onChange={this.changeVerifyPasswordHandler}/>
                                 </div>
-                                <button className="btn btn-success" onClick={this.saveUser}>Save</button>
+                                <button className="btn btn-success" onClick={this.saveUser}>Register</button>
                                 <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>Cancel</button>
                             </form>
                         </div>
@@ -90,5 +106,4 @@ class CreateUserComponent extends Component {
     }
 }
 
-
-export default CreateUserComponent
+export default withRouter(CreateUserComponent);

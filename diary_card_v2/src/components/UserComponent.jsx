@@ -26,7 +26,7 @@ class UserComponent extends React.Component {
             <div>
                 <h1 className = "text-center">User List</h1>
                 <div className = "row">
-                    <button className="btn btn-primary" onCLick={this.addUser}>Add User</button>
+                    <button className="btn btn-primary" onClick={this.addUser}>Add User</button>
                 </div>
                 <table className = "table table-striped">
                     <thead>

@@ -5,7 +5,6 @@ import org.launchcode.diary_card_v2_spring_maven.model.dto.SignInFormDTO;
 import org.launchcode.diary_card_v2_spring_maven.model.dto.SignUpFormDTO;
 import org.launchcode.diary_card_v2_spring_maven.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +14,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping
+@RequestMapping("/api/")
 public class AuthenticationController {
 
     @Autowired
