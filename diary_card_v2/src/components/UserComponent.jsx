@@ -1,5 +1,6 @@
 import React from 'react';
 import UserService from './services/UserService';
+import { withRouter } from "react-router-dom";
 
 class UserComponent extends React.Component {
 
@@ -18,14 +19,14 @@ class UserComponent extends React.Component {
     }
 
     addUser(){
-        this.props.history.push('/add-user');
+        this.props.history.push('/register');
     }
 
     render(){
         return (
             <div>
-                <h1 className = "text-center">User List</h1>
-                <div className = "row">
+                <h2 className = "text-center">User List</h2>
+                <div className = "row m-1">
                     <button className="btn btn-primary" onClick={this.addUser}>Add User</button>
                 </div>
                 <table className = "table table-striped">
@@ -57,4 +58,4 @@ class UserComponent extends React.Component {
     }
 }
 
-export default UserComponent
+export default withRouter(UserComponent)

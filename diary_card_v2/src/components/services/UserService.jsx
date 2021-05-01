@@ -9,11 +9,11 @@ class UserService {
     }
 
     createUser(formData){
-        return axios.post('http://localhost:8080/api/sign-up', formData)
+        return axios.post('http://localhost:8080/api/register', formData)
     }
 
     authenticateUser(formData){
-        return axios.post('http://localhost:8080/api/sign-in', formData)
+        return axios.post('http://localhost:8080/api/login', formData)
     }
 
 }

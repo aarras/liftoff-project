@@ -43,14 +43,14 @@ public class AuthenticationController {
         session.setAttribute(userSessionKey, user.getId());
     }
 
-    @GetMapping("/sign-up")
+    @GetMapping("/register")
     public String displaySignUpForm(Model model) {
         model.addAttribute(new SignUpFormDTO());
         model.addAttribute("title", "Sign Up");
         return "/sign-up";
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("/register")
     public String processSignUpForm(@ModelAttribute @Valid SignUpFormDTO signUpFormDTO,
                                           Errors errors, HttpServletRequest request,
                                           Model model) {
@@ -80,18 +80,18 @@ public class AuthenticationController {
         userRepository.save(newUser);
         setUserInSession(request.getSession(), newUser);
 
-        return "redirect:/sign-in";
+        return "redirect:/login";
 
     }
 
-    @GetMapping("/sign-in")
+    @GetMapping("/login")
     public String displaySignInForm(Model model) {
         model.addAttribute(new SignInFormDTO());
         model.addAttribute("title", "Sign In");
         return "sign-in";
     }
 
-    @PostMapping("/sign-in")
+    @PostMapping("/login")
     public String processSignInForm(@ModelAttribute @Valid SignInFormDTO signInFormDTO,
                                     Errors errors, HttpServletRequest request,
                                     Model model) {
@@ -125,6 +125,6 @@ public class AuthenticationController {
     @GetMapping("/sign-out")
     public String signOut(HttpServletRequest request) {
         request.getSession().invalidate();
-        return "redirect:/sign-in";
+        return "redirect:/login";
     }
 }

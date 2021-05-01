@@ -5,7 +5,7 @@ import Layout from '../Layout'
 export default () => {
   return (
       <Layout>
-      <div style={{ marginTop: '100px' }}>
+      <div style={{ marginTop: '60px', marginLeft: '80px' }}>
         <Typography variant="h4">Graph Data</Typography>
       </div>
     </Layout>
