@@ -22,7 +22,7 @@ class UserComponent extends React.Component {
         this.props.history.push('/register');
     }
 
-    render(){
+    render(){       
         return (
             <div>
                 <h2 className = "text-center">User List</h2>

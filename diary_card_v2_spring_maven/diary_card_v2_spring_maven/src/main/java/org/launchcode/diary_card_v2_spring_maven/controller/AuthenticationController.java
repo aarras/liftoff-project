@@ -14,9 +14,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api")
 public class AuthenticationController {
 
     @Autowired
@@ -65,7 +65,7 @@ public class AuthenticationController {
         if (existingUser != null) {
             errors.rejectValue("email", "email.alreadyexists", "A user with that email already exists");
             model.addAttribute("title", "Sign Up");
-            return "sign-up";
+            return "Email Error";
         }
 
         String password = signUpFormDTO.getPassword();

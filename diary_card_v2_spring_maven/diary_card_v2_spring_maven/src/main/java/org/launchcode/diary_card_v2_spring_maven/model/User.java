@@ -4,6 +4,7 @@ import lombok.Data;
 import org.dom4j.tree.AbstractEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -17,9 +18,11 @@ public class User extends AbstractEntity {
     private Long id;
 
     @Column(name="firstName")
+    @NotBlank(message="First Name is required.")
     private String firstName;
 
     @Column(name="lastName")
+    @NotBlank(message="Last Name is required.")
     private String lastName;
 
     @NotNull

@@ -16,12 +16,8 @@ const initialState = {
     verifyPasswordError: ''
 }
 
-const specialCharacters = ['@', '#', '!', '$', '*', '%']
-
 class CreateUserComponent extends Component {
     state = initialState;
-
-    specialChars = specialCharacters;
 
     constructor(props) {
         super(props)
@@ -154,28 +150,28 @@ class CreateUserComponent extends Component {
                                     <div className = "form-group col">
                                         <Input placeholder="First Name" name="firstName" className="form-control"
                                         value={this.state.firstName} onChange={this.changeFirstNameHandler}/>
-                                        <div class = "small" style={{color: "pink"}}>{this.state.firstNameError}</div>
+                                        <div className = "small" style={{color: "pink"}}>{this.state.firstNameError}</div>
                                     </div>
                                     <div className = "form-group col">
                                         <Input placeholder="Last Name" name="lastName" className="form-control"
                                         value={this.state.lastName} onChange={this.changeLastNameHandler}/>
-                                        <div class = "small" style={{color: "pink"}}>{this.state.lastNameError}</div>
+                                        <div className = "small" style={{color: "pink"}}>{this.state.lastNameError}</div>
                                     </div>
                                 </div>
                                 <div className = "form-group">
                                     <Input placeholder="Email Address" name="email" className="form-control"
                                     value={this.state.email} onChange={this.changeEmailHandler}/>
-                                    <div class = "small" style={{color: "pink"}}>{this.state.emailError}</div>
+                                    <div className = "small" style={{color: "pink"}}>{this.state.emailError}</div>
                                 </div>
                                 <div className = "form-group">
                                     <Input type="password" placeholder="Password" name="password" className="form-control"
                                     value={this.state.password} onChange={this.changePasswordHandler}/>
-                                    <div class = "small" style={{color: "pink"}}>{this.state.passwordError}</div>
+                                    <div className = "small" style={{color: "pink"}}>{this.state.passwordError}</div>
                                 </div>
                                 <div className = "form-group">
                                     <Input type="password" placeholder="Verify Password" name="verifyPassword" className="form-control"
                                     value={this.state.verifyPassword} onChange={this.changeVerifyPasswordHandler}/>
-                                    <div class = "small" style={{color: "pink"}}>{this.state.verifyPasswordError}</div>
+                                    <div className = "small" style={{color: "pink"}}>{this.state.verifyPasswordError}</div>
                                 </div>
                                 <button className="btn btn-primary" onClick={this.saveUser}>Register</button>
                                 <button className="btn btn-secondary" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>Cancel</button>
