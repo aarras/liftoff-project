@@ -5,7 +5,7 @@ const getAll = () => {
 };
 
 const get = id => {
-    return http.get('/forms/${id}');
+    return http.get(`/forms/${id}`);
 };
 
 const create = data => {
@@ -13,11 +13,11 @@ const create = data => {
 };
 
 const update = (id, data) => {
-    return http.put('/forms/${id}', data);
+    return http.put(`/forms/${id}`, data);
 };
 
 const remove = id => {
-    return http.delete('/forms/${id}');
+    return http.delete(`/forms/${id}`);
 };
 
 const removeAll = () => {
@@ -25,7 +25,7 @@ const removeAll = () => {
 };
 
 const findByName = name => {
-    return http.get('/forms?name=${name}');
+    return http.get(`/forms?name=${name}`);
 };
 
 export default {

@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
 import FormDataService from "./services/FormService";
+import { useParams } from 'react-router-dom';
 
-const Form = props => {
+const Form = () => {
     const initialFormState = {
       id: null,
       name: ""
     };
+
     const [currentForm, setCurrentForm] = useState(initialFormState);
     const [message, setMessage] = useState("");
+
+    const { id } = useParams();
   
     const getForm = id => {
-      FormDataService.get(id)
+        FormDataService.get(id)
         .then(response => {
-          setCurrentForm(response.data);
+            setCurrentForm(response.data);
           console.log(response.data);
         })
         .catch(e => {
@@ -21,8 +25,8 @@ const Form = props => {
     };
 
     useEffect(() => {
-      getForm(props.match.params.id);
-    }, [props.match.params.id]);
+      getForm(id);
+    }, [id]);
   
     const handleInputChange = event => {
       const { name, value } = event.target;
@@ -44,7 +48,7 @@ const Form = props => {
         FormDataService.remove(currentForm.id)
         .then(response => {
           console.log(response.data);
-          props.history.push("/forms");
+        window.location.href = "/forms"
         })
         .catch(e => {
           console.log(e);

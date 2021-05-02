@@ -15,7 +15,7 @@ const AddForm = () => {
     const [submitted, setsubmitted] = useState(false);
 
     const handleInputChange = event => {
-        const { name, value } = event.taget;
+        const { name, value } = event.target;
         setForm({ ...form, [name]: value });
     };
 
@@ -59,7 +59,7 @@ const AddForm = () => {
                         <input
                             type="text"
                             className="form-control"
-                            id="title"
+                            id="name"
                             required
                             value={form.name}
                             onChange={handleInputChange}
@@ -67,9 +67,9 @@ const AddForm = () => {
                         />
                     </div>
 
-                    <botton onClick={saveForm} className="btn btn-primary">
+                    <button onClick={saveForm} className="btn btn-primary">
                         Submit
-                    </botton>
+                    </button>
                 </div>
             )}
         </div>

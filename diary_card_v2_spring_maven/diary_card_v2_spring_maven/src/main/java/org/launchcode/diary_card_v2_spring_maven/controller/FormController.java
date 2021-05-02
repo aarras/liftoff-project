@@ -52,7 +52,7 @@ public class FormController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+//    @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
     @PostMapping("/forms")
     public ResponseEntity<Form> createForm(@RequestBody Form form) {
         try {
