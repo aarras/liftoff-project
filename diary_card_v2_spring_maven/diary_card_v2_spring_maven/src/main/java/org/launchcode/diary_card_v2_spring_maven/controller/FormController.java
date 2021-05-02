@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class FormController {
@@ -39,6 +39,7 @@ public class FormController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
     @GetMapping("/forms/{id}")
     public ResponseEntity<Form> getFormById(@PathVariable("id") long id) {
 
@@ -51,6 +52,7 @@ public class FormController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
     @PostMapping("/forms")
     public ResponseEntity<Form> createForm(@RequestBody Form form) {
         try {

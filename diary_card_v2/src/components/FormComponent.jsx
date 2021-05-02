@@ -19,7 +19,7 @@ const Form = props => {
           console.log(e);
         });
     };
-  
+
     useEffect(() => {
       getForm(props.match.params.id);
     }, [props.match.params.id]);
@@ -86,7 +86,7 @@ const Form = props => {
             ) : (
                 <div>
                     <br />
-                    <p>Please click on a Form...</p>
+                    <p>Please select a form.</p>
                 </div>
             )}
         </div>

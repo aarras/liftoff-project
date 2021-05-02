@@ -111,13 +111,13 @@ const FormList = () => {
                     </div>
                     
                     <Link
-                        to={"/forms/" + currentForm.id}
+                        to={"/form/" + currentForm.id}
                         className="badge badge-warning"
                     >
                         Edit
                     </Link>
                     <Link
-                        to={"/forms/" + currentForm.id}
+                        to={"/form/" + currentForm.id}
                         className="badge badge-danger"
                     >
                         Delete
