@@ -5,19 +5,18 @@ import org.launchcode.diary_card_v2_spring_maven.model.dto.SignInFormDTO;
 import org.launchcode.diary_card_v2_spring_maven.model.dto.SignUpFormDTO;
 import org.launchcode.diary_card_v2_spring_maven.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
-@Controller
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+@RequestMapping("/api")
 public class AuthenticationController {
 
     @Autowired
@@ -44,14 +43,14 @@ public class AuthenticationController {
         session.setAttribute(userSessionKey, user.getId());
     }
 
-    @GetMapping("/sign-up")
+    @GetMapping("/register")
     public String displaySignUpForm(Model model) {
         model.addAttribute(new SignUpFormDTO());
         model.addAttribute("title", "Sign Up");
         return "/sign-up";
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("/register")
     public String processSignUpForm(@ModelAttribute @Valid SignUpFormDTO signUpFormDTO,
                                           Errors errors, HttpServletRequest request,
                                           Model model) {
@@ -66,7 +65,7 @@ public class AuthenticationController {
         if (existingUser != null) {
             errors.rejectValue("email", "email.alreadyexists", "A user with that email already exists");
             model.addAttribute("title", "Sign Up");
-            return "sign-up";
+            return "Email Error";
         }
 
         String password = signUpFormDTO.getPassword();
@@ -81,18 +80,18 @@ public class AuthenticationController {
         userRepository.save(newUser);
         setUserInSession(request.getSession(), newUser);
 
-        return "redirect:/sign-in";
+        return "redirect:/login";
 
     }
 
-    @GetMapping("/sign-in")
+    @GetMapping("/login")
     public String displaySignInForm(Model model) {
         model.addAttribute(new SignInFormDTO());
         model.addAttribute("title", "Sign In");
         return "sign-in";
     }
 
-    @PostMapping("/sign-in")
+    @PostMapping("/login")
     public String processSignInForm(@ModelAttribute @Valid SignInFormDTO signInFormDTO,
                                     Errors errors, HttpServletRequest request,
                                     Model model) {
@@ -126,6 +125,6 @@ public class AuthenticationController {
     @GetMapping("/sign-out")
     public String signOut(HttpServletRequest request) {
         request.getSession().invalidate();
-        return "redirect:/sign-in";
+        return "redirect:/login";
     }
 }

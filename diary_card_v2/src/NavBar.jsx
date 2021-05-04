@@ -1,20 +1,21 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
-import { Link } from 'react-router-dom'
-import { AppBar, Toolbar } from '@material-ui/core'
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
+import Form from 'react-bootstrap/Form'
 
 export const NavBar = ({ color }) => (
-<AppBar color={color}>
-    <Toolbar>
-        <Link to="/">
-            <Button color="primary" variant="contained">Home</Button>
-        </Link>
-        <Link to="/forms">
-            <Button color="primary" variant="contained">Forms</Button>
-        </Link>
-        <Link to="/view-logs">
-            <Button color="primary" variant="contained">View Logs</Button>
-        </Link>
-    </Toolbar>
-</AppBar>
+<>
+  <Navbar bg="primary" variant="dark">
+    <Navbar.Brand href="/home">Diary Card</Navbar.Brand>
+    <Nav className="mr-auto">
+      <Nav.Link href="/home">Home</Nav.Link>
+      <Nav.Link href="/forms">Forms</Nav.Link>
+      <Nav.Link href="/view-logs">View Logs</Nav.Link>
+    </Nav>
+    <Form inline>
+      <Button href="/register">Log Out</Button>
+    </Form>
+  </Navbar>
+</>
 )

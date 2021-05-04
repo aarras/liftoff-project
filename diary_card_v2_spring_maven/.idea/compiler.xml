@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="diary_card_v2_spring_maven" target="11" />
+      <module name="diary_card_v2_spring_maven" target="13" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
