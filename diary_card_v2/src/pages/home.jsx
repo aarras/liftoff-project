@@ -8,7 +8,7 @@ export default () => {
   return (
     <Layout>
       <div style={{ marginTop: '60px' , marginLeft: '80px'}}>
-        <Typography variant="h4">Welcome back!</Typography>
+        <Typography variant="h4" className="mb-4">Welcome back!</Typography>
         <DateComponent />
         <UserComponent />
       </div>

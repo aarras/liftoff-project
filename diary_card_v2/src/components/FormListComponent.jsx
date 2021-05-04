@@ -62,8 +62,8 @@ const FormList = () => {
     };
 
     return (
-        <div className="list row">
-            <div className="col-md-8">
+        <div className=".container">
+            <div className="list row col-md-5">
                 <div className="input-group mb-3">
                     <input  
                         type="text"
@@ -83,23 +83,32 @@ const FormList = () => {
                     </div>
                 </div>
             </div>
-            <div className="col-md-6">
+            <div className="list row ml-2 mt-3 mb-2">
+                <h5>Select a form</h5>
+            </div>
+            <div className="list row col-md-5">
                 <ul className="list-group">
                     {forms &&
                         forms.map((form, index) => (
                             <li
                                 className={
-                                    "list-group-item" + (index === currentIndex ? "active" : "")
+                                    "list-group-item list-group-item-action" + (index === currentIndex ? " active" : "")
                                 }
                                 onClick={() => setActiveForm(form, index)}
                                 key={index}
                             >
-                                {form.name}
+                                {form.name} {index === currentIndex ? 
+                                <Link
+                                to={"/form/" + currentForm.id}
+                                className="badge badge-warning ml-3"
+                            >
+                                View Form
+                            </Link> : ""}
                             </li>
                         ))}
                 </ul>
             </div>
-            <div className="col-md-6">
+            {/* <div className="col-md-6">
                 {currentForm ? (
                     <div>
                         <h4>Form</h4>
@@ -112,24 +121,18 @@ const FormList = () => {
                     
                     <Link
                         to={"/form/" + currentForm.id}
-                        className="badge badge-warning"
+                        className="badge badge-primary"
                     >
-                        Edit
-                    </Link>
-                    <Link
-                        to={"/form/" + currentForm.id}
-                        className="badge badge-danger"
-                    >
-                        Delete
+                        View Form
                     </Link>
                 </div>
             ) : (
                 <div>
                     <br />
-                    <p>Please click on a Form...</p>
+                    <p>Select a form</p>
                 </div>
                 )}
-            </div>
+            </div> */}
         </div>
     );
 };

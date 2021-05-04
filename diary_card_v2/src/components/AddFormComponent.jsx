@@ -21,7 +21,7 @@ const AddForm = () => {
 
     const saveForm = () => {
         var data = {
-            name: FormatSizeRounded.name
+            name: form.name
         };
 
         FormDataService.create(data)
@@ -43,19 +43,26 @@ const AddForm = () => {
         setsubmitted(false);
     };
 
+    const goToForms = () => {
+        window.location.href = "/forms"
+    }
+
     return (
         <div className="submit-form">
             {submitted ? (
                 <div>
-                    <h4>You submitted successfully!</h4>
-                    <button className="btn btn-primary" onClick={newForm}>
-                        Add
+                    <h5 className="mb-3">New form created successfully!</h5>
+                    <button className="btn btn-primary mr-2" onClick={goToForms}>
+                        View Forms
+                    </button>
+                    <button className="btn btn-secondary" onClick={newForm}>
+                        Create Another
                     </button>
                 </div>
             ) : (
                 <div>
                     <div className="form-group">
-                        <label htmlFor="name">Name</label>
+                        <label htmlFor="name">Name your form:</label>
                         <input
                             type="text"
                             className="form-control"

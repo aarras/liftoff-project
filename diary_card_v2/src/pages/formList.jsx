@@ -7,7 +7,7 @@ export default () => {
   return (
     <Layout>
     <div style={{ marginTop: '60px', marginLeft: '80px'}}>
-      <Typography variant="h4">Forms</Typography>
+      <Typography variant="h4" className="mb-4">Your Forms</Typography>
       <FormList />
     </div>
   </Layout>

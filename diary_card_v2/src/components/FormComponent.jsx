@@ -17,7 +17,6 @@ const Form = () => {
         FormDataService.get(id)
         .then(response => {
             setCurrentForm(response.data);
-          console.log(response.data);
         })
         .catch(e => {
           console.log(e);
@@ -36,7 +35,7 @@ const Form = () => {
     const updateForm = () => {
      FormDataService.update(currentForm.id, currentForm)
         .then(response => {
-          console.log(response.data);
+         console.log(response.data);
           setMessage("The form was updated successfully!");
         })
         .catch(e => {
@@ -55,17 +54,21 @@ const Form = () => {
         });
     };
   
+    const goToForms = () => {
+      window.location.href = "/forms"
+    }
+
     return (
         <div>
             {currentForm ? (
                 <div className="edit-form">
-                <h4>Form</h4>
+                <h4>Edit Form</h4>
                 <form>
                     <div className="form-group">
-                        <label htmlFor="name">Name</label>
+                        <label htmlFor="name">Form Name:</label>
                         <input
                             type="text"
-                            className="form-control"
+                            className="form-control col-md-5"
                             id="name"
                             name="name"
                             value={currentForm.name}
@@ -73,18 +76,17 @@ const Form = () => {
                         />
                     </div>
                 </form>
-                    
-                    <button className="badge badge-danger mr-2" onClick={deleteForm}>
+               
+                  <button type="submit" className="badge badge-success mr-2" onClick={updateForm}>
+                    Update
+                  </button>
+                  <button className="badge badge-danger mr-2" onClick={deleteForm}>
                         Delete
+                  </button>
+                  <button className="badge badge-primary mr-2" onClick={goToForms}>
+                        Back To Forms
                     </button>
 
-                    <button
-                        type="submit"
-                        className="badge badge-success"
-                        onClick={updateForm}
-                    >
-                        Update
-                    </button>
                 <p>{message}</p>
                 </div>
             ) : (
