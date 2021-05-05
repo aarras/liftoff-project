@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import FormDataService from "./services/FormService";
 import { useParams } from 'react-router-dom';
+import Editable from "./EditableComponent";
+import FormFields from "./FormFieldsComponent";
+
+
 
 const Form = () => {
     const initialFormState = {
@@ -10,6 +14,8 @@ const Form = () => {
 
     const [currentForm, setCurrentForm] = useState(initialFormState);
     const [message, setMessage] = useState("");
+    const [task, setTask] = useState("");
+
 
     const { id } = useParams();
   
@@ -62,7 +68,43 @@ const Form = () => {
         <div>
             {currentForm ? (
                 <div className="edit-form">
-                <h4>Edit Form</h4>
+                  <Editable
+                    text={task}
+                    placeholder={currentForm.name}
+                    type="input"
+                    className="h4"
+                  >
+                    <div className="row ml-1">
+                      <input
+                        type="text"
+                        name="name"
+                        placeholder={currentForm.name}
+                        value={currentForm.name}
+                        onChange={handleInputChange}
+                        onBlur={updateForm}
+                        className="mr-2 form-control-lg"
+                      />
+                      <button type="submit" className="badge badge-success mr-2" onClick={updateForm}>
+                        Update Name
+                      </button>
+                      <button className="badge badge-danger mr-2" onClick={e => e.target.blur()}>
+                        Cancel
+                    </button>
+                    </div>
+                  </Editable>
+                  <div className="row ml-1"> 
+                    <button type="submit" className="badge badge-success mr-2" onClick={updateForm}>
+                      Edit Form
+                    </button>
+                    <button className="badge badge-danger mr-2" onClick={deleteForm}>
+                      Delete Form
+                    </button>
+                    <button className="badge badge-primary mr-2" onClick={goToForms}>
+                      View All Forms
+                    </button>
+                    <br/>
+                  </div>
+                                  
                 <form>
                     <div className="form-group">
                         <label htmlFor="name">Form Name:</label>
@@ -75,17 +117,10 @@ const Form = () => {
                             onChange={handleInputChange}
                         />
                     </div>
+                  {/* <FormFields /> */}
                 </form>
                
-                  <button type="submit" className="badge badge-success mr-2" onClick={updateForm}>
-                    Update
-                  </button>
-                  <button className="badge badge-danger mr-2" onClick={deleteForm}>
-                        Delete
-                  </button>
-                  <button className="badge badge-primary mr-2" onClick={goToForms}>
-                        Back To Forms
-                    </button>
+                  
 
                 <p>{message}</p>
                 </div>
