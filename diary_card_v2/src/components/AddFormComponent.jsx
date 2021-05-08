@@ -1,7 +1,5 @@
-import { FormatSizeRounded } from '@material-ui/icons';
 import React, { useState } from 'react';
 import FormDataService from './services/FormService';
-import { Link } from "react-router-dom";
 
 
 const AddForm = () => {

@@ -1,7 +1,6 @@
 package org.launchcode.diary_card_v2_spring_maven.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Table(name="input_options")
 @Entity
@@ -28,4 +27,6 @@ public class InputOption {
     public String getLabel() { return label; }
 
     public Integer getValue() { return value; }
+
+    public Long getId() { return id; }
 }

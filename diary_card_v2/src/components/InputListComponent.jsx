@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from "react";
-import FormDataService from "./services/FormService";
+import InputDataService from "./services/InputService";
 import { Link } from "react-router-dom";
 
-
-const FormList = () => {
-    const [forms, setForms] = useState([]);
-    const [currentForm, setCurrentForm] = useState(null);
+const InputList = () => {
+    const [inputs, setInputs] = useState([]);
+    const [currentInput, setCurrentInput] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(-1);
-    const [searchName, setSearchName] = useState("");
+    const [searchLabel, setSearchLabel] = useState("");
 
     useEffect(() => {
-        retrieveForms();
+        retrieveInputs();
     }, []);
 
-    const onChangeSearchName = e => {
-        const searchName = e.target.value;
-        setSearchName(searchName);
+    const onChangeSearchLabel = e => {
+        const searchLabel = e.target.value;
+        setSearchLabel(searchLabel);
     };
 
-    const retrieveForms = () => {
-        FormDataService.getAll()
+    const retrieveInputs = () => {
+        InputDataService.getAll()
             .then(response => {
-                setForms(response.data);
+                setInputs(response.data);
                 console.log(response.data);
             })
             .catch(e => {
@@ -30,18 +29,18 @@ const FormList = () => {
     };
 
     const refreshList = () => {
-        retrieveForms();
-        setCurrentForm(null);
+        retrieveInputs();
+        setCurrentInput(null);
         setCurrentIndex(-1);
     };
 
-    const setActiveForm = (form, index) => {
-        setCurrentForm(form);
+    const setActiveInput = (input, index) => {
+        setCurrentInput(input);
         setCurrentIndex(index);
     };
 
-    const removeAllForms = () => {
-        FormDataService.removeAll()
+    const removeAllInputs = () => {
+        InputDataService.removeAll()
             .then(response => {
                 console.log(response.data);
                 refreshList();
@@ -51,10 +50,10 @@ const FormList = () => {
             });
     };
 
-    const findByName = () => {
-        FormDataService.findByName(searchName)
+    const findByLabel = () => {
+        InputDataService.findByLabel(searchLabel)
             .then(response => {
-                setForms(response.data);
+                setInputs(response.data);
                 console.log(response.data);
             })
             .catch(e => {
@@ -62,8 +61,8 @@ const FormList = () => {
             });
     };
 
-    const addForm = () => {
-        window.location.href = "/forms/add"
+    const addInput = () => {
+        window.location.href = "/inputs/add"
     }
 
     return (
@@ -73,15 +72,15 @@ const FormList = () => {
                     <input  
                         type="text"
                         className="form-control"
-                        placeholder="Search by Name"
-                        value={searchName}
-                        onChange={onChangeSearchName}
+                        placeholder="Search by Label"
+                        value={searchLabel}
+                        onChange={onChangeSearchLabel}
                     />
                     <div className="input-group-append">
                         <button
                             className="btn btn-outline-secondary"
                             type="button"
-                            onClick={findByName}
+                            onClick={findByLabel}
                         >
                             Search
                         </button>
@@ -89,28 +88,28 @@ const FormList = () => {
                 </div>
             </div>
             <div className="list row ml-2 mt-3 mb-2">
-                <h5 className="mr-4">Select a form</h5>
-                <button className="badge badge-primary mr-2" onClick={addForm}>
-                    Create New Form
+                <h5 className="mr-4">Select an Input</h5>
+                <button className="badge badge-primary mr-2" onClick={addInput}>
+                    Create New Input
                 </button>
             </div>
             <div className="list row col-md-5">
                 <ul className="list-group">
-                    {forms &&
-                        forms.map((form, index) => (
+                    {inputs &&
+                        inputs.map((input, index) => (
                             <li
                                 className={
                                     "list-group-item list-group-item-action" + (index === currentIndex ? " active" : "")
                                 }
-                                onClick={() => setActiveForm(form, index)}
+                                onClick={() => setActiveInput(input, index)}
                                 key={index}
                             >
-                                {form.name} {index === currentIndex ? 
+                                {input.label} {index === currentIndex ? 
                                 <Link
-                                to={"/form/" + currentForm.id}
+                                to={"/input/" + currentInput.id}
                                 className="badge badge-warning ml-3"
                             >
-                                View Form
+                                View Input
                             </Link> : ""}
                             </li>
                         ))}
@@ -120,4 +119,4 @@ const FormList = () => {
     );
 };
 
-export default FormList;
+export default InputList;

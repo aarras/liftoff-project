@@ -5,11 +5,12 @@ import org.dom4j.tree.AbstractEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 @Table(name = "form")
 @Entity
-public class Form extends AbstractEntity {
+public class Form {
 
     @Id
     @GeneratedValue
@@ -18,6 +19,7 @@ public class Form extends AbstractEntity {
 
     @Column(name="name")
     @NotBlank(message = "Form Name is required.")
+    @Size(max = 100, message = "Form name must be less than 100 characters")
     private String name;
 
     public Form() {}
