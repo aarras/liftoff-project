@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import FormDataService from "./services/FormService";
+import InputDataService from "./services/InputService";
 import { useParams } from 'react-router-dom';
 import Editable from "./EditableComponent";
 import { Link } from "react-router-dom";
@@ -15,6 +16,7 @@ const Form = () => {
     const [message, setMessage] = useState("");
     const [task, setTask] = useState("");
 
+    const [inputs, setInputs] = useState([]);
 
     const { id } = useParams();
   
@@ -26,6 +28,17 @@ const Form = () => {
         .catch(e => {
           console.log(e);
         });
+    };
+
+    const retrieveInputs = () => {
+      InputDataService.getAll()
+          .then(response => {
+              setInputs(response.data);
+              console.log(response.data);
+          })
+          .catch(e => {
+              console.log(e);
+          });
     };
 
     useEffect(() => {
@@ -107,7 +120,8 @@ const Form = () => {
               </button>
               <br/>
             </div>          
-          <p>{message}</p>
+            <p>{message}</p>
+
           </div> 
         </div>
   );

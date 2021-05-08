@@ -75,6 +75,7 @@ const InputList = () => {
                         placeholder="Search by Label"
                         value={searchLabel}
                         onChange={onChangeSearchLabel}
+                        onBlur={searchLabel}
                     />
                     <div className="input-group-append">
                         <button

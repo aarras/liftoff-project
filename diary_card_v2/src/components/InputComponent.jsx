@@ -7,13 +7,14 @@ import Editable from "./EditableComponent";
 const Input = () => {
     const initialInputState = {
       id: null,
-      label: ""
+      label: "",
+      type: null,
+      form: null
     };
 
     const [currentInput, setCurrentInput] = useState(initialInputState);
     const [message, setMessage] = useState("");
     const [task, setTask] = useState("");
-
 
     const { id } = useParams();
   
@@ -86,7 +87,7 @@ const Input = () => {
                         onBlur={updateInput}
                         className="mr-2 form-control-lg"
                       />
-                      <button type="submit" className="badge badge-success mr-2" onClick={updateInput}>
+                      <button type="submit" className="badge badge-success mr-2" onClick={() => updateInput}>
                         Update Label
                       </button>
                       <button className="badge badge-danger mr-2" onClick={e => e.target.blur()}>
@@ -95,7 +96,7 @@ const Input = () => {
                     </div>
                   </Editable>
                   <div className="row ml-1"> 
-                    <button type="submit" className="badge badge-success mr-2" onClick={unavailable("Edit Input")}>
+                    <button type="submit" className="badge badge-success mr-2" onClick={() => unavailable("Edit Input")}>
                       Edit Input
                     </button>
                     <button className="badge badge-danger mr-2" onClick={deleteInput}>
@@ -106,7 +107,7 @@ const Input = () => {
                     </button>
                     <br/>
                   </div>          
-                <p>{message}</p>
+                  <p>{message}</p>
                 </div>
             ) : (
                 <div>
@@ -115,7 +116,7 @@ const Input = () => {
                 </div>
             )}
         </div>
-  );
+    );
 };
 
-  export default Input;
+export default Input;
