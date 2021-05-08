@@ -17,6 +17,8 @@ const Form = () => {
     const [task, setTask] = useState("");
 
     const [inputs, setInputs] = useState([]);
+    const [currentInput, setCurrentInput] = useState(null);
+    const [currentIndex, setCurrentIndex] = useState(-1);
 
     const { id } = useParams();
   
@@ -30,20 +32,41 @@ const Form = () => {
         });
     };
 
-    const retrieveInputs = () => {
-      InputDataService.getAll()
-          .then(response => {
-              setInputs(response.data);
-              console.log(response.data);
-          })
-          .catch(e => {
-              console.log(e);
-          });
+    // const retrieveInputs = () => {
+    //   InputDataService.getAll()
+    //       .then(response => {
+    //           setInputs(response.data);
+    //           console.log(response.data);
+    //       })
+    //       .catch(e => {
+    //           console.log(e);
+    //       });
+    // };
+
+    const retrieveInputsByForm = id => {
+      InputDataService.getAllByForm(id)
+        .then(response => {
+          setInputs(response.data);
+          console.log(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        });
     };
+
+    const setActiveInput = (input, index) => {
+      setCurrentInput(input);
+      setCurrentIndex(index);
+    };
+
+    const refreshList = (id) => {
+      retrieveInputsByForm(id);
+    }
 
     useEffect(() => {
       getForm(id);
-    }, [id]);
+      retrieveInputsByForm(id);
+    }, [id], [id]);
   
     const handleInputChange = event => {
       const { name, value } = event.target;
@@ -121,7 +144,22 @@ const Form = () => {
               <br/>
             </div>          
             <p>{message}</p>
-
+            <div>
+            <ul className="list-group">
+                    {inputs &&
+                        inputs.map((input) => (
+                          <div className="container">
+                            <input
+                            type="text"
+                            className="form-control"
+                            id={input.label}
+                            value={input.label}
+                            name={input.label}
+                            ></input>
+                          </div>
+                        ))}
+                </ul>
+            </div>
           </div> 
         </div>
   );

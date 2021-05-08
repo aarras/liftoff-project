@@ -4,9 +4,13 @@ const getAll = () => {
     return http.get("/inputs");
 };
 
+const getAllByForm = id => {
+    return http.get(`/form/${id}/inputs`);
+};
+
 const get = id => {
     return http.get(`/inputs/${id}`);
-};
+}; 
 
 const create = data => {
     return http.post("/inputs", data);
@@ -30,6 +34,7 @@ const findByLabel = label => {
 
 export default {
     getAll,
+    getAllByForm,
     get,
     create,
     update,

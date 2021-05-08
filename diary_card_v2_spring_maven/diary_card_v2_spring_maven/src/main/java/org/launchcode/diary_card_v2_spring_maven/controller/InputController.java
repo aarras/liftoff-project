@@ -44,6 +44,26 @@ public class InputController {
         }
     }
 
+    @GetMapping("/form/{id}/inputs")
+    public ResponseEntity<List<Input>> getAllInputsByForm(@PathVariable("id") long id) {
+
+        Optional<Form> formData = formRepository.findById(id);
+
+        try {
+            List<Input> inputs = new ArrayList<Input>();
+
+            inputRepository.findByForm(formData).forEach(inputs::add);
+
+        if (inputs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+            return new ResponseEntity<>(inputs, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/inputs/{id}")
     public ResponseEntity<Input> getInputById(@PathVariable("id") long id) {
 
