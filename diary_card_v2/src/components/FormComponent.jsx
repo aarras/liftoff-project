@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import FormDataService from "./services/FormService";
+import CategoryDataService from "./services/CategoryService";
 import InputDataService from "./services/InputService";
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Editable from "./EditableComponent";
-import { Link } from "react-router-dom";
 
 
 const Form = () => {
@@ -16,10 +16,16 @@ const Form = () => {
     const [message, setMessage] = useState("");
     const [task, setTask] = useState("");
 
-    const [inputs, setInputs] = useState([]);
-    const [currentInput, setCurrentInput] = useState(null);
-    const [currentIndex, setCurrentIndex] = useState(-1);
+    const [categories, setCategories] = useState([]);
+    const [currentCategory, setCurrentCategory] = useState(null);
+    const [currentCategoryIndex, setCurrentCategoryIndex] = useState(-1);
 
+    const [inputs, setInputs] = useState([]);
+    const [inputsByCategory, setInputsByCategory] = useState([]);
+    const [currentInput, setCurrentInput] = useState(null);
+    const [currentInputIndex, setCurrentInputIndex] = useState(-1);
+
+    // Form ID
     const { id } = useParams();
   
     const getForm = id => {
@@ -32,19 +38,21 @@ const Form = () => {
         });
     };
 
-    // const retrieveInputs = () => {
-    //   InputDataService.getAll()
-    //       .then(response => {
-    //           setInputs(response.data);
-    //           console.log(response.data);
-    //       })
-    //       .catch(e => {
-    //           console.log(e);
-    //       });
-    // };
+    const retrieveCategoriesByForm = id => {
+      CategoryDataService.getAllByForm(id)
+        .then(response => {
+          setCategories(response.data);
+          retrieveAllInputs();
+          console.log(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        });        
+    };
 
-    const retrieveInputsByForm = id => {
-      InputDataService.getAllByForm(id)
+    const retrieveInputsByCategory = id => {
+      console.log("HELP");
+      InputDataService.getAllByCategory(id)
         .then(response => {
           setInputs(response.data);
           console.log(response.data);
@@ -54,20 +62,37 @@ const Form = () => {
         });
     };
 
+    const retrieveAllInputs = () => {
+      InputDataService.getAll()
+        .then(response => {
+          setInputs(response.data);
+          console.log(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };    
+
+    const setActiveCategory = (category, index) => {
+      setCurrentCategory(category);
+      setCurrentCategoryIndex(index);
+    }
+
     const setActiveInput = (input, index) => {
       setCurrentInput(input);
-      setCurrentIndex(index);
+      setCurrentInputIndex(index);
     };
 
     const refreshList = (id) => {
-      retrieveInputsByForm(id);
+      retrieveCategoriesByForm(id);
     }
 
     useEffect(() => {
       getForm(id);
-      retrieveInputsByForm(id);
-    }, [id], [id]);
-  
+      retrieveCategoriesByForm(id);
+      retrieveAllInputs();
+    }, [id], [id], []);
+
     const handleInputChange = event => {
       const { name, value } = event.target;
       setCurrentForm({ ...currentForm, [name]: value });
@@ -129,39 +154,48 @@ const Form = () => {
               </button>
               </div>
             </Editable>
-            <div className="row ml-1"> 
-              <Link to={"/form/" + currentForm.id + "/input/add"}>
-                <button className="badge badge-success mr-2">
-                  Add Input
+            <div className="row ml-1 mb-5"> 
+              <Link to={"/form/" + currentForm.id + "/category/add"}>
+                <button className="badge badge-warning mr-2">
+                  Add Category
                 </button>
               </Link>
-              <button className="badge badge-danger mr-2" onClick={deleteForm}>
-                Delete Form
-              </button>
-              <button className="badge badge-primary mr-2" onClick={goToForms}>
-                View All Forms
-              </button>
+              <Link to={"/forms/"}>
+                <button className="badge badge-primary mr-2">
+                  View All Forms
+                </button>
+              </Link>
               <br/>
             </div>          
             <p>{message}</p>
             <div>
             <ul className="list-group">
-                    {inputs &&
-                        inputs.map((input) => (
-                          <div className="container">
-                            <input
-                            type="text"
-                            className="form-control"
-                            id={input.label}
-                            value={input.label}
-                            name={input.label}
-                            ></input>
-                          </div>
-                        ))}
-                </ul>
-            </div>
-          </div> 
-        </div>
+              <div className="container no-gutters">
+                {categories && categories.map((category) => (
+                  <div className="row justify-content-center">
+                    <strong className="h4" key={category.id}>----------{category.name}----------</strong>
+                      <div className="row">
+                        {retrieveInputsByCategory(category.id)}     
+                          {inputs && inputs.map((input) => (
+                            <div className="col-4 mb-3">
+                              <strong>{input.label}</strong>
+                              <input
+                              type={category.inputType}
+                              className="form-control"
+                              id={input.label}
+                              placeholder="Response"
+                              name={input.label}
+                              ></input>
+                            </div>
+                          ))}
+                      </div>
+                  </div>
+                ))}
+              </div>
+            </ul>
+          </div>
+        </div> 
+      </div>
   );
 };
 

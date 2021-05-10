@@ -4,8 +4,8 @@ const getAll = () => {
     return http.get("/inputs");
 };
 
-const getAllByForm = id => {
-    return http.get(`/form/${id}/inputs`);
+const getAllByCategory = id => {
+    return http.get(`/category/${id}/inputs`);
 };
 
 const get = id => {
@@ -34,7 +34,7 @@ const findByLabel = label => {
 
 export default {
     getAll,
-    getAllByForm,
+    getAllByCategory,
     get,
     create,
     update,

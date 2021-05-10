@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import InputDataService from './services/InputService';
 import { useParams } from "react-router-dom";
-import FormDataService from "./services/FormService";
-
+import CategoryDataService from "./services/CategoryService";
 
 
 const AddInput = () => {
     const initialInputState = {
         id: null,
         name: "",
-        type: null,
-        form: null
+        category: null
     };
 
-    const initialFormState = {
+    const initialCategoryState = {
         id: null,
-        name: ""
+        name: "",
+        inputType: null,
+        form: null
     };
     
-    const [currentForm, setCurrentForm] = useState(initialFormState);
+    const [currentCategory, setCurrentCategory] = useState(initialCategoryState);
     
     const [input, setInput] = useState(initialInputState);
     const [submitted, setsubmitted] = useState(false);
@@ -26,10 +26,10 @@ const AddInput = () => {
     // Form ID
     const { id } = useParams();
 
-    const getForm = id => {
-        FormDataService.get(id)
+    const getCategory = id => {
+        CategoryDataService.get(id)
         .then(response => {
-            setCurrentForm(response.data);
+            setCurrentCategory(response.data);
         })
         .catch(e => {
           console.log(e);
@@ -37,7 +37,7 @@ const AddInput = () => {
     };
 
     useEffect(() => {
-        getForm(id);
+        getCategory(id);
     }, [id]);
 
     const handleInputChange = event => {
@@ -48,8 +48,7 @@ const AddInput = () => {
     const saveInput = () => {
         var data = {
             label: input.name,
-            type: null,
-            form: currentForm
+            category: currentCategory
         };
 
         InputDataService.create(data)
@@ -57,7 +56,7 @@ const AddInput = () => {
                 setInput({
                     id: response.data.id,
                     label: response.data.name,
-                    form: response.data.form
+                    category: response.data.category
                 });
                 setsubmitted(true);
                 console.log(response.data);
@@ -72,8 +71,8 @@ const AddInput = () => {
         setsubmitted(false);
     };
 
-    const goToInputs = () => {
-        window.location.href = "/inputs"
+    const goToCategory = () => {
+        window.location.href = "/category/" + id
     }
 
     return (
@@ -81,8 +80,8 @@ const AddInput = () => {
             {submitted ? (
                 <div>
                     <h5 className="mb-3">New input created successfully!</h5>
-                    <button className="btn btn-primary mr-2" onClick={goToInputs}>
-                        View Input
+                    <button className="btn btn-primary mr-2" onClick={goToCategory}>
+                        Back to Category
                     </button>
                     <button className="btn btn-secondary" onClick={newInput}>
                         Create Another
@@ -103,8 +102,11 @@ const AddInput = () => {
                         />
                     </div>
 
-                    <button onClick={saveInput} className="btn btn-primary">
+                    <button onClick={saveInput} className="btn btn-primary mr-2">
                         Submit
+                    </button>
+                    <button onClick={goToCategory} className="btn btn-danger">
+                        Cancel
                     </button>
                 </div>
             )}

@@ -1,8 +1,8 @@
 package org.launchcode.diary_card_v2_spring_maven.controller;
 
-import org.launchcode.diary_card_v2_spring_maven.model.Form;
+import org.launchcode.diary_card_v2_spring_maven.model.Category;
 import org.launchcode.diary_card_v2_spring_maven.model.Input;
-import org.launchcode.diary_card_v2_spring_maven.repository.FormRepository;
+import org.launchcode.diary_card_v2_spring_maven.repository.CategoryRepository;
 import org.launchcode.diary_card_v2_spring_maven.repository.InputRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class InputController {
     public InputRepository inputRepository;
 
     @Autowired
-    public FormRepository formRepository;
+    public CategoryRepository categoryRepository;
 
     @GetMapping("/inputs")
     public ResponseEntity<List<Input>> getAllInputs(@RequestParam(required = false) String label) {
@@ -44,15 +44,15 @@ public class InputController {
         }
     }
 
-    @GetMapping("/form/{id}/inputs")
-    public ResponseEntity<List<Input>> getAllInputsByForm(@PathVariable("id") long id) {
+    @GetMapping("/category/{id}/inputs")
+    public ResponseEntity<List<Input>> getAllInputsByCategory(@PathVariable("id") long id) {
 
-        Optional<Form> formData = formRepository.findById(id);
+        Optional<Category> categoryData = categoryRepository.findById(id);
 
         try {
             List<Input> inputs = new ArrayList<Input>();
 
-            inputRepository.findByForm(formData).forEach(inputs::add);
+            inputRepository.findByCategory(categoryData).forEach(inputs::add);
 
         if (inputs.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -81,7 +81,7 @@ public class InputController {
 
         try {
             Input _input = inputRepository
-                    .save(new Input(input.getLabel(), input.getType(), input.getForm()));
+                    .save(new Input(input.getLabel(), input.getCategory()));
             return new ResponseEntity<>(_input, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -89,7 +89,7 @@ public class InputController {
     }
 
     @PutMapping("/inputs/{id}")
-    public ResponseEntity<Input> updateForm(@PathVariable("id") long id, @RequestBody Input input) {
+    public ResponseEntity<Input> updateInput(@PathVariable("id") long id, @RequestBody Input input) {
         Optional<Input> inputData = inputRepository.findById(id);
 
         if (inputData.isPresent()) {

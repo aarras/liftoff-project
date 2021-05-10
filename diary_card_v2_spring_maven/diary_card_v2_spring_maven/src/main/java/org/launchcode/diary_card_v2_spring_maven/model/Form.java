@@ -1,7 +1,6 @@
 package org.launchcode.diary_card_v2_spring_maven.model;
 
 import lombok.Data;
-import org.dom4j.tree.AbstractEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
