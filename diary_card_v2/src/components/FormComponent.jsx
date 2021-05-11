@@ -3,7 +3,8 @@ import FormDataService from "./services/FormService";
 import CategoryDataService from "./services/CategoryService";
 import InputDataService from "./services/InputService";
 import { useParams, Link } from 'react-router-dom';
-import Editable from "./EditableComponent";
+import Category from "./CategoryComponent";
+import ComponentHeader from "./ComponentHeader"
 
 
 const Form = () => {
@@ -129,72 +130,17 @@ const Form = () => {
 
     return (
         <div>
-          <div className="edit-form">
-            <Editable
-              text={task}
-              placeholder={currentForm.name}
-              type="input"
-              className="h4"
-            >
-              <div className="row ml-1">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder={currentForm.name}
-                  value={currentForm.name}
-                  onChange={handleInputChange}
-                  onBlur={updateForm}
-                  className="mr-2 form-control-lg"
-                />
-                <button type="submit" className="badge badge-success mr-2" onClick={updateForm}>
-                  Update Name
-                </button>
-                <button className="badge badge-danger mr-2" onClick={e => e.target.blur()}>
-                  Cancel
-              </button>
-              </div>
-            </Editable>
-            <div className="row ml-1 mb-5"> 
-              <Link to={"/form/" + currentForm.id + "/category/add"}>
-                <button className="badge badge-warning mr-2">
-                  Add Category
-                </button>
-              </Link>
-              <Link to={"/forms/"}>
-                <button className="badge badge-primary mr-2">
-                  View All Forms
-                </button>
-              </Link>
-              <br/>
-            </div>          
-            <p>{message}</p>
+          <ComponentHeader name={currentForm.name} type="Form" types="Forms" subType="Category" id={currentForm.id} />
             <div>
-            <ul className="list-group">
-              <div className="container no-gutters">
-                {categories && categories.map((category) => (
-                  <div className="row justify-content-center">
+              {categories && categories.map((category) => (
+                <div className="container">
+                  <div className="row mb-4  justify-content-center">
                     <strong className="h4" key={category.id}>----------{category.name}----------</strong>
-                      <div className="row">
-                        {retrieveInputsByCategory(category.id)}     
-                          {inputs && inputs.map((input) => (
-                            <div className="col-4 mb-3">
-                              <strong>{input.label}</strong>
-                              <input
-                              type={category.inputType}
-                              className="form-control"
-                              id={input.label}
-                              placeholder="Response"
-                              name={input.label}
-                              ></input>
-                            </div>
-                          ))}
-                      </div>
                   </div>
-                ))}
-              </div>
-            </ul>
-          </div>
-        </div> 
+                  <Category value={category.id}></Category>
+                </div>
+              ))}
+          </div> 
       </div>
   );
 };

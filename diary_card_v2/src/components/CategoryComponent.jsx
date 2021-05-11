@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import CategoryDataService from "./services/CategoryService";
 import InputDataService from "./services/InputService";
 import { useParams, Link } from 'react-router-dom';
-import Editable from "./EditableComponent";
+import ComponentHeader from "./ComponentHeader"
 
 
-const Category = () => {
+const Category = ( {value} ) => {
     const initialCategoryState = {
       id: null,
       name: "",
@@ -24,6 +24,8 @@ const Category = () => {
     // Category ID
     const { id } = useParams();
   
+    const sentCategory = value;
+
     const getCategory = id => {
         CategoryDataService.get(id)
         .then(response => {
@@ -34,7 +36,7 @@ const Category = () => {
         });
     };
 
-    const retrieveInputsByCategory = id => {
+    const retrieveInputsByCategory = (id) => {
         InputDataService.getAllByCategory(id)
           .then(response => {
             setInputs(response.data);
@@ -54,10 +56,19 @@ const Category = () => {
         retrieveInputsByCategory(id);
     }
 
+    const chooseSource = () => {
+      let sentCategoryId = sentCategory;
+      let categoryId = id;
+
+      if (sentCategoryId == null) {
+        return categoryId;
+      } else return sentCategoryId;
+    }
+
     useEffect(() => {
-      getCategory(id);
-      retrieveInputsByCategory(id);
-    }, [id], [id]);
+      getCategory(chooseSource());
+      retrieveInputsByCategory(chooseSource());
+    }, [chooseSource()], [chooseSource()]);
   
     const handleInputChange = event => {
       const { name, value } = event.target;
@@ -95,68 +106,26 @@ const Category = () => {
     }
 
     return (
-        <div>
-            <div className="edit-form">
-                <Editable
-                    text={task}
-                    placeholder={currentCategory.name}
-                    type="input"
-                    className="h4"
+      <div>
+        <ComponentHeader name={currentCategory.name} type="Category" types="Categories" subType="Input" id={currentCategory.id} />
+          <div className="row mb-5 justify-content-center">
+            {inputs && inputs.map((input) => (
+              <div className="col-3 justify-content-center">
+                <div className="mb-4 text-center">
+                  <strong>{input.label}</strong>
+                  <input
+                    type={currentCategory.inputType}
+                    className="form-control"
+                    id={input.label}
+                    placeholder="Insert response here"
+                    name={input.label}
                   >
-                    <div className="row ml-1">
-                      <input
-                        type="text"
-                        name="name"
-                        placeholder={currentCategory.name}
-                        value={currentCategory.name}
-                        onChange={handleInputChange}
-                        onBlur={updateCategory}
-                        className="mr-2 form-control-lg"
-                      />
-                        <button type="submit" className="badge badge-success mr-2" onClick={() => updateCategory}>
-                            Update Category
-                         </button>
-                        <button className="badge badge-danger mr-2" onClick={e => e.target.blur()}>
-                            Cancel
-                        </button>
-                    </div>
-                </Editable>
-                    <div className="row ml-1 mb-5"> 
-                        <Link to={"/category/" + currentCategory.id + "/input/add"}>
-                            <button className="badge badge-warning mr-2">
-                                Add Input
-                            </button>
-                        </Link>
-                        <Link to={"/categories/"}>
-                            <button className="badge badge-primary mr-2">
-                                View All Categories
-                            </button>
-                        </Link>
-                        <br/>
-                    </div>          
-                    <p>{message}</p>
-                    <div>
-                        <ul className="list-group">
-                            <div className="container no-gutters">
-                                <div className="row justify-content-center">
-                                    {inputs && inputs.map((input) => (  
-                                        <div className="col-4 mb-3">
-                                            <strong>{input.label}</strong>
-                                                <input
-                                                    type={currentCategory.inputType}
-                                                    className="form-control"
-                                                    id={input.label}
-                                                    placeholder="Insert response here"
-                                                    name={input.label}
-                                                ></input>
-                                        </div>          
-                                    ))}
-                                </div>
-                            </div>
-                        </ul>
-                    </div>
-            </div> 
-        </div>
+                  </input>
+                </div>
+              </div>
+            ))}
+          </div>
+      </div>
   );
 };
 
