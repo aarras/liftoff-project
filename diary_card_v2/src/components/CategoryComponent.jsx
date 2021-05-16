@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import CategoryDataService from "./services/CategoryService";
 import InputDataService from "./services/InputService";
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ComponentHeader from "./ComponentHeader"
+import Input from "./InputComponent";
+import PropTypes from "prop-types";
 
 
-const Category = ( {value} ) => {
+const Category = ( {value, onSubmit, data, onComponentClick} ) => {
     const initialCategoryState = {
       id: null,
       name: "",
@@ -26,6 +28,10 @@ const Category = ( {value} ) => {
   
     const sentCategory = value;
 
+    Category.propTypes = {
+      onSubmit: PropTypes.func
+    }
+
     const getCategory = id => {
         CategoryDataService.get(id)
         .then(response => {
@@ -40,7 +46,6 @@ const Category = ( {value} ) => {
         InputDataService.getAllByCategory(id)
           .then(response => {
             setInputs(response.data);
-            console.log(response.data);
           })
           .catch(e => {
             console.log(e);
@@ -69,7 +74,7 @@ const Category = ( {value} ) => {
       getCategory(chooseSource());
       retrieveInputsByCategory(chooseSource());
     }, [chooseSource()], [chooseSource()]);
-  
+
     const handleInputChange = event => {
       const { name, value } = event.target;
       setCurrentCategory({ ...currentCategory, [name]: value });
@@ -97,6 +102,12 @@ const Category = ( {value} ) => {
         });
     };
 
+    const handleSubmit = (event) => {
+
+      console.log("CATEGORY SLDFJSKLFJSF")
+      event.preventDefault();
+    }
+
     const unavailable = (name) => {
       setMessage(name + " is unavailable at this time")
     }
@@ -107,20 +118,16 @@ const Category = ( {value} ) => {
 
     return (
       <div>
-        <ComponentHeader name={currentCategory.name} type="Category" types="Categories" subType="Input" id={currentCategory.id} />
-          <div className="row mb-5 justify-content-center">
+        {!sentCategory &&
+          <div>
+            <ComponentHeader componentName={currentCategory.name} type="Category" types="Categories" subType="Input" subTypes="Inputs" componentId={currentCategory.id} url="categories" />
+          </div>
+        }
+          <div className="row mb-5 justify-content-center" id='my-form'>
             {inputs && inputs.map((input) => (
-              <div className="col-3 justify-content-center">
+              <div className="col-3 justify-content-center" key={input.id}>
                 <div className="mb-4 text-center">
-                  <strong>{input.label}</strong>
-                  <input
-                    type={currentCategory.inputType}
-                    className="form-control"
-                    id={input.label}
-                    placeholder="Insert response here"
-                    name={input.label}
-                  >
-                  </input>
+                  <Input value={input.id} />
                 </div>
               </div>
             ))}

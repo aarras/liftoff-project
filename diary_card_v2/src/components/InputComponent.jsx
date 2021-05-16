@@ -1,40 +1,77 @@
 import React, { useState, useEffect } from "react";
 import InputDataService from "./services/InputService";
+import InputResponseDataService from "./services/InputResponseService";
 import { useParams } from 'react-router-dom';
-import Editable from "./EditableComponent";
+import ComponentHeader from "./ComponentHeader"
+import PropTypes from "prop-types";
 
 
-const Input = () => {
+const Input = (value) => {
+    const initialCategoryState = {
+      id: null,
+      name: "",
+      inputType: "",
+      form: null
+    }  
+
     const initialInputState = {
       id: null,
       label: "",
-      type: null,
-      form: null
+      category: null
     };
+
+    const initialResponseState = {
+      id: null,
+      date: null,
+      response: "",
+      input: null
+    }
+
+    const [currentCategory, setCurrentCategory] = useState(initialCategoryState);
 
     const [currentInput, setCurrentInput] = useState(initialInputState);
     const [message, setMessage] = useState("");
     const [task, setTask] = useState("");
 
+    const [currentResponse, setCurrentResponse] = useState(initialResponseState);
+    const [responses, setResponses] = useState([]);
+    const [submitted, setsubmitted] = useState(false);
+
+    // Input ID
     const { id } = useParams();
   
-    const getInput = id => {
-        InputDataService.get(id)
+    Input.propTypes = {
+      onSubmit: PropTypes.func
+    };
+
+    const getInput = source => {
+        InputDataService.get(source)
         .then(response => {
-            setCurrentInput(response.data);
+
+          setCurrentInput(response.data);
         })
         .catch(e => {
           console.log(e);
         });
     };
 
+    const chooseSource = () => {
+      let sentInputId = value.value;
+      let inputId = id;
+
+      if (sentInputId != null) {
+        return sentInputId;
+      } else return inputId;
+    }
+
     useEffect(() => {
-      getInput(id);
-    }, [id]);
+      getInput(chooseSource());
+    }, [chooseSource()]);
   
     const handleInputChange = event => {
-      const { label, value } = event.target;
-      setCurrentInput({ ...currentInput, [label]: value });
+      const { value } = event.target;
+      setCurrentResponse({ ...currentResponse, response: value });
+      console.log(currentResponse);
     };
     
     const updateInput = () => {
@@ -57,7 +94,36 @@ const Input = () => {
         .catch(e => {
           console.log(e);
         });
-    };
+    }; 
+
+    const handleSubmit = (event) => {
+      event.preventDefault();
+
+      var dateInMilliSeconds = new Date().getTime();
+
+      var data = {
+        response: currentResponse.response,
+        date: dateInMilliSeconds,
+        input: currentInput
+      };
+
+      console.log(data);
+
+      InputResponseDataService.create(data)
+        .then(response => {
+          setCurrentResponse({
+            id: response.data.id,
+            response: response.data.response,
+            date: response.data.date,
+            input: response.data.input
+          });
+          setsubmitted(true);
+          console.log(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
 
     const unavailable = (label) => {
       setMessage(label + " is unavailable at this time")
@@ -67,54 +133,31 @@ const Input = () => {
       window.location.href = "/inputs"
     }
 
+    const testConsole = () => {
+      console.log(currentInput);
+    }
+
     return (
         <div>
-            {currentInput ? (
-                <div className="edit-form">
-                  <Editable
-                    text={task}
-                    placeholder={currentInput.label}
-                    type="input"
-                    className="h4"
-                  >
-                    <div className="row ml-1">
-                      <input
-                        type="text"
-                        name="name"
-                        placeholder={currentInput.label}
-                        value={currentInput.label}
-                        onChange={handleInputChange}
-                        onBlur={updateInput}
-                        className="mr-2 form-control-lg"
-                      />
-                      <button type="submit" className="badge badge-success mr-2" onClick={() => updateInput}>
-                        Update Label
-                      </button>
-                      <button className="badge badge-danger mr-2" onClick={e => e.target.blur()}>
-                        Cancel
-                    </button>
-                    </div>
-                  </Editable>
-                  <div className="row ml-1"> 
-                    <button type="submit" className="badge badge-success mr-2" onClick={() => unavailable("Edit Input")}>
-                      Edit Input
-                    </button>
-                    <button className="badge badge-danger mr-2" onClick={deleteInput}>
-                      Delete Input
-                    </button>
-                    <button className="badge badge-primary mr-2" onClick={goToInputs}>
-                      View All Inputs
-                    </button>
-                    <br/>
-                  </div>          
-                  <p>{message}</p>
-                </div>
-            ) : (
-                <div>
-                    <br />
-                    <p>Please select an input.</p>
-                </div>
-            )}
+          {!value.value &&
+            <div>
+              <ComponentHeader componentName={currentInput.label} type="Input" types="Inputs" subType="Response" subTypes="Responses" componentId={currentInput.id} url="/inputs" />
+            </div>
+          }
+          <form id="formInput" onSubmit={handleSubmit}>
+            <div className="row ml-1"> 
+              <strong>{currentInput.label}</strong>
+              <input
+                type={currentCategory.inputType}
+                className="form-control"
+                id={currentInput.id}
+                placeholder="Insert response here"
+                name={currentInput.label}
+                onChange={handleInputChange}
+                onSubmit={handleSubmit}
+              />
+            </div>  
+          </form>       
         </div>
     );
 };

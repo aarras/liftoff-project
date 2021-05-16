@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FormDataService from "./services/FormService";
 import CategoryDataService from "./services/CategoryService";
-import InputDataService from "./services/InputService";
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Category from "./CategoryComponent";
 import ComponentHeader from "./ComponentHeader"
 
@@ -22,7 +21,6 @@ const Form = () => {
     const [currentCategoryIndex, setCurrentCategoryIndex] = useState(-1);
 
     const [inputs, setInputs] = useState([]);
-    const [inputsByCategory, setInputsByCategory] = useState([]);
     const [currentInput, setCurrentInput] = useState(null);
     const [currentInputIndex, setCurrentInputIndex] = useState(-1);
 
@@ -43,36 +41,13 @@ const Form = () => {
       CategoryDataService.getAllByForm(id)
         .then(response => {
           setCategories(response.data);
-          retrieveAllInputs();
           console.log(response.data);
         })
         .catch(e => {
           console.log(e);
         });        
     };
-
-    const retrieveInputsByCategory = id => {
-      console.log("HELP");
-      InputDataService.getAllByCategory(id)
-        .then(response => {
-          setInputs(response.data);
-          console.log(response.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    };
-
-    const retrieveAllInputs = () => {
-      InputDataService.getAll()
-        .then(response => {
-          setInputs(response.data);
-          console.log(response.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    };    
+ 
 
     const setActiveCategory = (category, index) => {
       setCurrentCategory(category);
@@ -91,8 +66,7 @@ const Form = () => {
     useEffect(() => {
       getForm(id);
       retrieveCategoriesByForm(id);
-      retrieveAllInputs();
-    }, [id], [id], []);
+    }, [id], [id]);
 
     const handleInputChange = event => {
       const { name, value } = event.target;
@@ -130,17 +104,20 @@ const Form = () => {
 
     return (
         <div>
-          <ComponentHeader name={currentForm.name} type="Form" types="Forms" subType="Category" id={currentForm.id} />
+          <ComponentHeader componentName={currentForm.name} type="Form" types="Forms" subType="Category" subTypes="Categories" componentId={currentForm.id} url="forms" />
             <div>
               {categories && categories.map((category) => (
-                <div className="container">
+                <div className="container" key={category.id}>
                   <div className="row mb-4  justify-content-center">
                     <strong className="h4" key={category.id}>----------{category.name}----------</strong>
                   </div>
                   <Category value={category.id}></Category>
                 </div>
               ))}
-          </div> 
+          </div>
+          <button className="btn btn-primary" form='formInput' content='Submit' value='Submit'>
+              Submit Form
+          </button> 
       </div>
   );
 };

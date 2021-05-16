@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import CategoryDataService from './services/CategoryService';
 import { useParams } from "react-router-dom";
 import FormDataService from "./services/FormService";
+import Category from './CategoryComponent';
+import PropTypes from "prop-types";
 
 
-
-const AddCategory = () => {
+const AddCategory = (onSubmit) => {
     const initialCategoryState = {
         id: null,
         name: "",
@@ -28,6 +29,10 @@ const AddCategory = () => {
 
     // Form ID
     const { id } = useParams();
+
+    Category.propTypes = {
+        onSubmit: PropTypes.func
+    };
 
     const getForm = id => {
         FormDataService.get(id)

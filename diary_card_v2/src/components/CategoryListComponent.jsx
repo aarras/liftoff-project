@@ -75,7 +75,6 @@ const CategoryList = () => {
                         placeholder="Search by Name"
                         value={searchName}
                         onChange={onChangeSearchName}
-                        onBlur={searchName}
                     />
                     <div className="input-group-append">
                         <button

@@ -54,9 +54,9 @@ public class InputController {
 
             inputRepository.findByCategory(categoryData).forEach(inputs::add);
 
-        if (inputs.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+            if (inputs.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
 
             return new ResponseEntity<>(inputs, HttpStatus.OK);
         } catch (Exception e) {
