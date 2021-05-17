@@ -59,5 +59,5 @@ public class InputResponse {
     public void setInput(Input input) {
         this.input = input;
     }
-    
+
 }

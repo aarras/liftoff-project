@@ -109,7 +109,7 @@ const Form = () => {
               {categories && categories.map((category) => (
                 <div className="container" key={category.id}>
                   <div className="row mb-4  justify-content-center">
-                    <strong className="h4" key={category.id}>----------{category.name}----------</strong>
+                    <strong className="h4">----------{category.name}----------</strong>
                   </div>
                   <Category value={category.id}></Category>
                 </div>
@@ -122,4 +122,4 @@ const Form = () => {
   );
 };
 
-  export default Form;
+export default Form;

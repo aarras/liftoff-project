@@ -3,7 +3,6 @@ import InputDataService from "./services/InputService";
 import InputResponseDataService from "./services/InputResponseService";
 import { useParams } from 'react-router-dom';
 import ComponentHeader from "./ComponentHeader"
-import PropTypes from "prop-types";
 
 
 const Input = (value) => {
@@ -22,7 +21,7 @@ const Input = (value) => {
 
     const initialResponseState = {
       id: null,
-      date: null,
+      submissionDate: null,
       response: "",
       input: null
     }
@@ -39,10 +38,6 @@ const Input = (value) => {
 
     // Input ID
     const { id } = useParams();
-  
-    Input.propTypes = {
-      onSubmit: PropTypes.func
-    };
 
     const getInput = source => {
         InputDataService.get(source)
@@ -103,7 +98,7 @@ const Input = (value) => {
 
       var data = {
         response: currentResponse.response,
-        date: dateInMilliSeconds,
+        submissionDate: dateInMilliSeconds,
         input: currentInput
       };
 
@@ -114,7 +109,7 @@ const Input = (value) => {
           setCurrentResponse({
             id: response.data.id,
             response: response.data.response,
-            date: response.data.date,
+            submissionDate: response.data.date,
             input: response.data.input
           });
           setsubmitted(true);
