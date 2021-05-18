@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import FormDataService from "./services/FormService";
 import CategoryDataService from "./services/CategoryService";
+import InputDataService from "./services/InputService";
 import { useParams } from 'react-router-dom';
 import Category from "./CategoryComponent";
 import ComponentHeader from "./ComponentHeader"
+import DisplayForm from "./DisplayFormComponent"
 
 
 const Form = () => {
@@ -12,16 +14,29 @@ const Form = () => {
       name: ""
     };
 
+    const initialCategoryState = {
+      id: null,
+      name: "",
+      inputType: null,
+      form: null
+    };
+
+    const initialInputState = {
+      id: null,
+      label: "",
+      category: null
+    };
+
     const [currentForm, setCurrentForm] = useState(initialFormState);
     const [message, setMessage] = useState("");
     const [task, setTask] = useState("");
 
     const [categories, setCategories] = useState([]);
-    const [currentCategory, setCurrentCategory] = useState(null);
+    const [currentCategory, setCurrentCategory] = useState(initialCategoryState);
     const [currentCategoryIndex, setCurrentCategoryIndex] = useState(-1);
 
     const [inputs, setInputs] = useState([]);
-    const [currentInput, setCurrentInput] = useState(null);
+    const [currentInput, setCurrentInput] = useState(initialInputState);
     const [currentInputIndex, setCurrentInputIndex] = useState(-1);
 
     // Form ID
@@ -48,6 +63,15 @@ const Form = () => {
         });        
     };
  
+    const retrieveInputsByCategory = (id) => {
+      InputDataService.getAllByCategory(id)
+        .then(response => {
+          setInputs(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
 
     const setActiveCategory = (category, index) => {
       setCurrentCategory(category);
@@ -66,6 +90,7 @@ const Form = () => {
     useEffect(() => {
       getForm(id);
       retrieveCategoriesByForm(id);
+
     }, [id], [id]);
 
     const handleInputChange = event => {
@@ -94,6 +119,10 @@ const Form = () => {
         });
     };
 
+    const submitForm = (event) => {
+      console.log(event)
+    }
+
     const unavailable = (name) => {
       setMessage(name + " is unavailable at this time")
     }
@@ -102,9 +131,13 @@ const Form = () => {
       window.location.href = "/forms"
     }
 
+
     return (
         <div>
           <ComponentHeader componentName={currentForm.name} type="Form" types="Forms" subType="Category" subTypes="Categories" componentId={currentForm.id} url="forms" />
+            <div>
+              <DisplayForm />
+            </div>
             <div>
               {categories && categories.map((category) => (
                 <div className="container" key={category.id}>
@@ -115,7 +148,7 @@ const Form = () => {
                 </div>
               ))}
           </div>
-          <button className="btn btn-primary" form='formInput' content='Submit' value='Submit'>
+          <button className="btn btn-primary" form='formInput' content='Submit' value='Submit' onClick={submitForm}>
               Submit Form
           </button> 
       </div>

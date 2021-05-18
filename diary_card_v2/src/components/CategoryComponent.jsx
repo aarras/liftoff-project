@@ -7,7 +7,7 @@ import Input from "./InputComponent";
 import PropTypes from "prop-types";
 
 
-const Category = ( {value, onSubmit, data, onComponentClick} ) => {
+const Category = ( {value} ) => {
     const initialCategoryState = {
       id: null,
       name: "",
