@@ -7,6 +7,7 @@ import Input from "./InputComponent";
 
 
 const DisplayForm = () => {
+
     const initialFormState = {
       id: null,
       name: ""
@@ -16,7 +17,8 @@ const DisplayForm = () => {
       id: null,
       name: "",
       inputType: null,
-      form: null
+      form: null,
+      catInputs: []
     };
 
     const initialInputState = {
@@ -31,8 +33,9 @@ const DisplayForm = () => {
     const [message, setMessage] = useState("");
     const [task, setTask] = useState("");
 
-    const [categories, setCategories] = useState([]);
     const [currentCategory, setCurrentCategory] = useState(initialCategoryState);
+    const [categories, setCategories] = useState([]);
+    const [categoriesWithInputs, setCategoriesWithInputs] = useState([]);
     const [currentCategoryIndex, setCurrentCategoryIndex] = useState(-1);
 
     const [inputs, setInputs] = useState([]);
@@ -56,47 +59,62 @@ const DisplayForm = () => {
         .then(response => {
           setCategories(response.data);
           console.log(response.data);
-          retrieveInputsByCategory(response.data);
         })
+        .then(data => { retrieveInputsByCategory(categories) })
         .catch(e => {
           console.log(e);
         });        
     };
  
     const retrieveInputsByCategory = (categories) => {
-        for (let category of categories) {
-
-            InputDataService.getAllByCategory(category.id)
+        let categoriezWithInputs = [];
+        
+        for (let oneCategory of categories) {
+            
+            let categoryz = initialCategoryState;
+            
+            InputDataService.getAllByCategory(oneCategory.id)
                 .then(response => {
-                setInputs(response.data);
-                setAllInputs(inputs);
-                console.log(response.data);
-                console.log(allInputs);
+                    categoryz = {
+                        id: oneCategory.id,
+                        name: oneCategory.name,
+                        inputType: oneCategory.inputType,
+                        form: oneCategory.form,
+                        catInputs: response.data
+                    }
+
+                    categoriezWithInputs.push(categoryz);
+                          
+                    setCategoriesWithInputs(categoriesWithInputs => 
+                        [...categoriesWithInputs, categoriezWithInputs]);
+                        console.log(categoryz);
                 })
                 .catch(e => {
                 console.log(e);
                 });
-
         }
+
+        console.log(categoriesWithInputs);
+
     };
 
-    const listCategories = categories.map((category) => 
+    const daForm = categoriesWithInputs.map((category) => 
         <div className="container" key={category.id}>
             <div className="row mb-4  justify-content-center">
                 <strong className="h4">----------{category.name}----------</strong>
             </div>
             <div>
-                {inputs && inputs.map((input) => (
+                {category.catInputs && category.catInputs.map((input) => ( 
                     <div className="col-3 justify-content-center" key={input.id}>
                         <div className="mb-4 text-center">
                             <div className="row ml-1"> 
                                 <strong>{input.label}</strong>
                                 <input
-                                    type={input.inputType}
+                                    type={category.input.inputType}
                                     className="form-control"
-                                    id={input.id}
+                                    id={category.input.id}
                                     placeholder="Insert response here"
-                                    name={input.label}
+                                    name={category.input.label}
                                     // onChange={handleInputChange}
                                     // onSubmit={handleSubmit}
                                 />
@@ -111,15 +129,15 @@ const DisplayForm = () => {
     useEffect(() => {
         getForm(id);
         retrieveCategoriesByForm(id);
-    }, [id], [id]);
+    }, [], []);
+    
 
     return (
         <div>
-            {listCategories}
+            {daForm}
         </div>
 
     );
-
 
 };
 

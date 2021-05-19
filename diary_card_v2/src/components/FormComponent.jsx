@@ -91,7 +91,7 @@ const Form = () => {
       getForm(id);
       retrieveCategoriesByForm(id);
 
-    }, [id], [id]);
+    }, [], []);
 
     const handleInputChange = event => {
       const { name, value } = event.target;
@@ -139,14 +139,14 @@ const Form = () => {
               <DisplayForm />
             </div>
             <div>
-              {categories && categories.map((category) => (
+              {/* {categories && categories.map((category) => (
                 <div className="container" key={category.id}>
                   <div className="row mb-4  justify-content-center">
                     <strong className="h4">----------{category.name}----------</strong>
                   </div>
                   <Category value={category.id}></Category>
                 </div>
-              ))}
+              ))} */}
           </div>
           <button className="btn btn-primary" form='formInput' content='Submit' value='Submit' onClick={submitForm}>
               Submit Form
