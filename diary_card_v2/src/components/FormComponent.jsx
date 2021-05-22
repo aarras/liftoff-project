@@ -27,6 +27,40 @@ const Form = () => {
       category: null
     };
 
+    const initialResponseState = {
+      inputResponses: [ { 
+        responseId: null, 
+        submissionDate: null, 
+        response: "",
+        input: {
+          inputId: null,
+          label: "",
+          category: {
+            categoryId: null,
+            name: "",
+            inputType: null,
+          }
+        } 
+      } ]
+    }
+
+    const initialState = ( [{
+        categoryId: null,
+        categoryName: "",
+        inputType: null,
+        inputs: [{
+          inputId: null,
+          inputLabel: "",
+          response: {
+            responseId: null,
+            submissionDate: null,
+            response: ""
+          }
+        }]
+    }] )
+
+    const [state, setState] = useState(initialState);
+
     const [currentForm, setCurrentForm] = useState(initialFormState);
     const [message, setMessage] = useState("");
     const [task, setTask] = useState("");
@@ -55,6 +89,7 @@ const Form = () => {
     const retrieveCategoriesByForm = id => {
       CategoryDataService.getAllByForm(id)
         .then(response => {
+          setState(response.data);
           setCategories(response.data);
           console.log(response.data);
         })
@@ -63,7 +98,7 @@ const Form = () => {
         });        
     };
  
-    const retrieveInputsByCategory = (id) => {
+    const retrieveInputsByCategory = () => {
       InputDataService.getAllByCategory(id)
         .then(response => {
           setInputs(response.data);
@@ -135,18 +170,18 @@ const Form = () => {
     return (
         <div>
           <ComponentHeader componentName={currentForm.name} type="Form" types="Forms" subType="Category" subTypes="Categories" componentId={currentForm.id} url="forms" />
-            <div>
+            {/* <div>
               <DisplayForm />
-            </div>
+            </div> */}
             <div>
-              {/* {categories && categories.map((category) => (
+              {categories && categories.map((category) => (
                 <div className="container" key={category.id}>
                   <div className="row mb-4  justify-content-center">
                     <strong className="h4">----------{category.name}----------</strong>
                   </div>
-                  <Category value={category.id}></Category>
+                  <Category state={state[state.indexOf(category.name)]} setState={newState => setState({ ...state[state], [category.name]: newState })} value={category.id} />
                 </div>
-              ))} */}
+              ))}
           </div>
           <button className="btn btn-primary" form='formInput' content='Submit' value='Submit' onClick={submitForm}>
               Submit Form

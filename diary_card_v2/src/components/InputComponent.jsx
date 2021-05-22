@@ -42,7 +42,7 @@ const Input = (value) => {
     const getInput = source => {
         InputDataService.get(source)
         .then(response => {
-
+          //console.log(state);
           setCurrentInput(response.data);
         })
         .catch(e => {

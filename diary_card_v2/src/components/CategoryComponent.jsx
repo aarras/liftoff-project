@@ -7,7 +7,7 @@ import Input from "./InputComponent";
 import PropTypes from "prop-types";
 
 
-const Category = ( {value} ) => {
+const Category = ( {value, state, setState} ) => {
     const initialCategoryState = {
       id: null,
       name: "",
@@ -28,6 +28,8 @@ const Category = ( {value} ) => {
   
     const sentCategory = value;
 
+    const sentState = state;
+
     Category.propTypes = {
       onSubmit: PropTypes.func
     }
@@ -45,9 +47,13 @@ const Category = ( {value} ) => {
     const retrieveInputsByCategory = (id) => {
         InputDataService.getAllByCategory(id)
           .then(response => {
+            setState(response.data);
             setInputs(response.data);
+            console.log(state);
           })
           .catch(e => {
+            console.log(state);
+
             console.log(e);
           });
     };
@@ -72,7 +78,7 @@ const Category = ( {value} ) => {
 
     useEffect(() => {
       getCategory(chooseSource());
-      retrieveInputsByCategory(chooseSource());
+      //retrieveInputsByCategory(chooseSource());
     }, [chooseSource()], [chooseSource()]);
 
     const handleInputChange = event => {
@@ -103,13 +109,15 @@ const Category = ( {value} ) => {
     };
 
     const handleSubmit = (event) => {
-
-      console.log("CATEGORY SLDFJSKLFJSF")
       event.preventDefault();
     }
 
-    const unavailable = (name) => {
-      setMessage(name + " is unavailable at this time")
+    const unavailable = (event) => {
+      event.preventDefault();
+      setMessage(" is unavailable at this time");
+      //retrieveInputsByCategory(state.id);
+      console.log(state);
+      //setState({ ...state, [state]: "asdfasfsadf"})
     }
   
     const goToCategories = () => {
@@ -127,12 +135,15 @@ const Category = ( {value} ) => {
             {inputs && inputs.map((input) => (
               <div className="col-3 justify-content-center" key={input.id}>
                 <div className="mb-4 text-center">
-                  <Input value={input.id} />
-                </div>
-              </div>
+                  <Input state={state[state.inputs.indexOf(input)]} setState={newState => setState({ ...state, [input.id]: newState })} value={input.id} />
+                  </div>
+                  </div>
             ))}
-          </div>
-      </div>
+            </div>
+                <button className="btn btn-success" onClick={unavailable} />
+              </div>
+          
+      
   );
 };
 
