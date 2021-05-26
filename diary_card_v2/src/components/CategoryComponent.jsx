@@ -7,7 +7,7 @@ import Input from "./InputComponent";
 import PropTypes from "prop-types";
 
 
-const Category = ( {value, state, setState} ) => {
+const Category = ( {value, categoryId, categoryName, inputType, formCategoryState, setFormState, setCurrentFormCategory} ) => {
     const initialCategoryState = {
       id: null,
       name: "",
@@ -28,8 +28,6 @@ const Category = ( {value, state, setState} ) => {
   
     const sentCategory = value;
 
-    const sentState = state;
-
     Category.propTypes = {
       onSubmit: PropTypes.func
     }
@@ -38,6 +36,7 @@ const Category = ( {value, state, setState} ) => {
         CategoryDataService.get(id)
         .then(response => {
             setCurrentCategory(response.data);
+            unavailable();
         })
         .catch(e => {
           console.log(e);
@@ -47,13 +46,9 @@ const Category = ( {value, state, setState} ) => {
     const retrieveInputsByCategory = (id) => {
         InputDataService.getAllByCategory(id)
           .then(response => {
-            setState(response.data);
             setInputs(response.data);
-            console.log(state);
           })
           .catch(e => {
-            console.log(state);
-
             console.log(e);
           });
     };
@@ -78,7 +73,7 @@ const Category = ( {value, state, setState} ) => {
 
     useEffect(() => {
       getCategory(chooseSource());
-      //retrieveInputsByCategory(chooseSource());
+      retrieveInputsByCategory(chooseSource());
     }, [chooseSource()], [chooseSource()]);
 
     const handleInputChange = event => {
@@ -113,11 +108,11 @@ const Category = ( {value, state, setState} ) => {
     }
 
     const unavailable = (event) => {
-      event.preventDefault();
-      setMessage(" is unavailable at this time");
-      //retrieveInputsByCategory(state.id);
-      console.log(state);
-      //setState({ ...state, [state]: "asdfasfsadf"})
+      //setMessage(" is unavailable at this time");
+      console.log(formCategoryState);
+      setFormState([3, 2, 1]);
+      setCurrentFormCategory(currentCategory);
+      console.log(formCategoryState);
     }
   
     const goToCategories = () => {
@@ -135,13 +130,13 @@ const Category = ( {value, state, setState} ) => {
             {inputs && inputs.map((input) => (
               <div className="col-3 justify-content-center" key={input.id}>
                 <div className="mb-4 text-center">
-                  <Input state={state[state.inputs.indexOf(input)]} setState={newState => setState({ ...state, [input.id]: newState })} value={input.id} />
-                  </div>
-                  </div>
+                  <Input inputState={input} setInputState={newState => setFormState({ ...formCategoryState, [input]: newState })} value={input.id} />
+                </div>
+              </div>
             ))}
             </div>
                 <button className="btn btn-success" onClick={unavailable} />
-              </div>
+            </div>
           
       
   );

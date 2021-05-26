@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import ComponentHeader from "./ComponentHeader"
 
 
-const Input = (value) => {
+const Input = ( {value, inputState, setInputState} ) => {
     const initialCategoryState = {
       id: null,
       name: "",
@@ -51,7 +51,7 @@ const Input = (value) => {
     };
 
     const chooseSource = () => {
-      let sentInputId = value.value;
+      let sentInputId = value;
       let inputId = id;
 
       if (sentInputId != null) {
@@ -122,6 +122,9 @@ const Input = (value) => {
 
     const unavailable = (label) => {
       setMessage(label + " is unavailable at this time")
+      setInputState(1);
+      console.log(inputState);
+      console.log();
     }
   
     const goToInputs = () => {
@@ -134,7 +137,7 @@ const Input = (value) => {
 
     return (
         <div>
-          {!value.value &&
+          {!value &&
             <div>
               <ComponentHeader componentName={currentInput.label} type="Input" types="Inputs" subType="Response" subTypes="Responses" componentId={currentInput.id} url="/inputs" />
             </div>
@@ -152,7 +155,10 @@ const Input = (value) => {
                 onSubmit={handleSubmit}
               />
             </div>  
-          </form>       
+          </form>
+          <div>
+            <button className="btn btn-success" onClick={unavailable} />
+          </div>       
         </div>
     );
 };

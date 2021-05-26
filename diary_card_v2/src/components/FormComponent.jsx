@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import FormDataService from "./services/FormService";
 import CategoryDataService from "./services/CategoryService";
-import InputDataService from "./services/InputService";
 import { useParams } from 'react-router-dom';
 import Category from "./CategoryComponent";
 import ComponentHeader from "./ComponentHeader"
@@ -10,8 +9,7 @@ import DisplayForm from "./DisplayFormComponent"
 
 const Form = () => {
     const initialFormState = {
-      id: null,
-      name: ""
+      categories: null
     };
 
     const initialCategoryState = {
@@ -21,56 +19,18 @@ const Form = () => {
       form: null
     };
 
-    const initialInputState = {
-      id: null,
-      label: "",
-      category: null
-    };
-
-    const initialResponseState = {
-      inputResponses: [ { 
-        responseId: null, 
-        submissionDate: null, 
-        response: "",
-        input: {
-          inputId: null,
-          label: "",
-          category: {
-            categoryId: null,
-            name: "",
-            inputType: null,
-          }
-        } 
-      } ]
-    }
-
-    const initialState = ( [{
-        categoryId: null,
-        categoryName: "",
-        inputType: null,
-        inputs: [{
-          inputId: null,
-          inputLabel: "",
-          response: {
-            responseId: null,
-            submissionDate: null,
-            response: ""
-          }
-        }]
-    }] )
-
-    const [state, setState] = useState(initialState);
+    const [formState, setFormState] = useState(initialFormState);
 
     const [currentForm, setCurrentForm] = useState(initialFormState);
     const [message, setMessage] = useState("");
     const [task, setTask] = useState("");
 
     const [categories, setCategories] = useState([]);
-    const [currentCategory, setCurrentCategory] = useState(initialCategoryState);
+    const [currentCategory, setCurrentCategory] = useState([]);
     const [currentCategoryIndex, setCurrentCategoryIndex] = useState(-1);
 
     const [inputs, setInputs] = useState([]);
-    const [currentInput, setCurrentInput] = useState(initialInputState);
+    //const [currentInput, setCurrentInput] = useState(initialInputState);
     const [currentInputIndex, setCurrentInputIndex] = useState(-1);
 
     // Form ID
@@ -89,34 +49,48 @@ const Form = () => {
     const retrieveCategoriesByForm = id => {
       CategoryDataService.getAllByForm(id)
         .then(response => {
-          setState(response.data);
+          let sentArray = response.data;
+          let newObject = {};
+
+          for (let cat of sentArray) {
+            const addObject = Object.assign(newObject, {
+              [cat.name]: { 
+                form: cat.form,
+                id: cat.id,
+                inputType: cat.inputType,
+                name: cat.name,
+                order: cat.order
+               }
+            })
+          }
+
           setCategories(response.data);
-          console.log(response.data);
+          setFormState({ ...formState, categories: newObject });
         })
         .catch(e => {
           console.log(e);
         });        
     };
  
-    const retrieveInputsByCategory = () => {
-      InputDataService.getAllByCategory(id)
-        .then(response => {
-          setInputs(response.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    };
+    // const retrieveInputsByCategory = () => {
+    //   InputDataService.getAllByCategory(id)
+    //     .then(response => {
+    //       setInputs(response.data);
+    //     })
+    //     .catch(e => {
+    //       console.log(e);
+    //     });
+    // };
 
-    const setActiveCategory = (category, index) => {
-      setCurrentCategory(category);
-      setCurrentCategoryIndex(index);
-    }
+    // const setActiveCategory = (category, index) => {
+    //   setCurrentCategory(category);
+    //   setCurrentCategoryIndex(index);
+    // }
 
-    const setActiveInput = (input, index) => {
-      setCurrentInput(input);
-      setCurrentInputIndex(index);
-    };
+    // const setActiveInput = (input, index) => {
+    //   //setCurrentInput(input);
+    //   setCurrentInputIndex(index);
+    // };
 
     const refreshList = (id) => {
       retrieveCategoriesByForm(id);
@@ -125,7 +99,6 @@ const Form = () => {
     useEffect(() => {
       getForm(id);
       retrieveCategoriesByForm(id);
-
     }, [], []);
 
     const handleInputChange = event => {
@@ -159,34 +132,60 @@ const Form = () => {
     }
 
     const unavailable = (name) => {
-      setMessage(name + " is unavailable at this time")
+      //setMessage(name + " is unavailable at thiss time")
+      console.log(formState);
     }
   
     const goToForms = () => {
       window.location.href = "/forms"
     }
 
-
     return (
-        <div>
-          <ComponentHeader componentName={currentForm.name} type="Form" types="Forms" subType="Category" subTypes="Categories" componentId={currentForm.id} url="forms" />
-            {/* <div>
-              <DisplayForm />
-            </div> */}
-            <div>
-              {categories && categories.map((category) => (
-                <div className="container" key={category.id}>
-                  <div className="row mb-4  justify-content-center">
-                    <strong className="h4">----------{category.name}----------</strong>
-                  </div>
-                  <Category state={state[state.indexOf(category.name)]} setState={newState => setState({ ...state[state], [category.name]: newState })} value={category.id} />
+      <div>
+        <ComponentHeader 
+          componentName={currentForm.name} 
+          type="Forms" 
+          types="Forms" 
+          subType="Category" 
+          subTypes="Categories" 
+          componentId={currentForm.id} 
+          url="forms"
+        />
+          {/* <div>
+            <DisplayForm />
+          </div> */}
+          <div>
+            {categories && categories.map((category, name, index) => (
+              <div className="container" key={category.id}>
+                <div className="row mb-4  justify-content-center">
+                  <strong className="h4">
+                    ----------{category.name}----------
+                  </strong>
                 </div>
-              ))}
+                <Category 
+                  formCategoryState={formState} 
+                  setFormState={inputs => 
+                    setFormState({ ...formState, categories: 
+                                { ...formState.categories, [category.name]: 
+                                { ...formState.categories[category.name], inputs: 
+                                inputs } }})} 
+                  setCurrentFormCategory={newState => 
+                    setCurrentCategory(newState)} 
+                  value={category.id} 
+                />
+              </div>
+            ))}
           </div>
-          <button className="btn btn-primary" form='formInput' content='Submit' value='Submit' onClick={submitForm}>
-              Submit Form
-          </button> 
-      </div>
+        <button
+          className="btn btn-primary" 
+          form='formInput' 
+          content='Submit' 
+          value='Submit'
+          onClick={unavailable}
+        >
+            Submit Form
+        </button> 
+    </div>
   );
 };
 
