@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import ComponentHeader from "./ComponentHeader"
 
 
-const Input = ( {value, inputState, setInputState} ) => {
+const Input = ( {value, inputCategory, formState, setCategoryInputs} ) => {
     const initialCategoryState = {
       id: null,
       name: "",
@@ -30,10 +30,8 @@ const Input = ( {value, inputState, setInputState} ) => {
 
     const [currentInput, setCurrentInput] = useState(initialInputState);
     const [message, setMessage] = useState("");
-    const [task, setTask] = useState("");
 
     const [currentResponse, setCurrentResponse] = useState(initialResponseState);
-    const [responses, setResponses] = useState([]);
     const [submitted, setsubmitted] = useState(false);
 
     // Input ID
@@ -42,7 +40,6 @@ const Input = ( {value, inputState, setInputState} ) => {
     const getInput = source => {
         InputDataService.get(source)
         .then(response => {
-          //console.log(state);
           setCurrentInput(response.data);
         })
         .catch(e => {
@@ -66,7 +63,6 @@ const Input = ( {value, inputState, setInputState} ) => {
     const handleInputChange = event => {
       const { value } = event.target;
       setCurrentResponse({ ...currentResponse, response: value });
-      console.log(currentResponse);
     };
     
     const updateInput = () => {
@@ -104,31 +100,35 @@ const Input = ( {value, inputState, setInputState} ) => {
 
       console.log(data);
 
-      InputResponseDataService.create(data)
-        .then(response => {
-          setCurrentResponse({
-            id: response.data.id,
-            response: response.data.response,
-            submissionDate: response.data.date,
-            input: response.data.input
-          });
-          setsubmitted(true);
-          console.log(response.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
+      setCategoryInputs(data);
+
+      // InputResponseDataService.create(data)
+      //   .then(response => {
+      //     setCurrentResponse({
+      //       id: response.data.id,
+      //       response: response.data.response,
+      //       submissionDate: response.data.date,
+      //       input: response.data.input
+      //     });
+      //     setsubmitted(true);
+      //     console.log(response.data);
+      //   })
+      //   .catch(e => {
+      //     console.log(e);
+      //   });
     }
 
     const unavailable = (label) => {
       setMessage(label + " is unavailable at this time")
-      setInputState(1);
-      console.log(inputState);
-      console.log();
+      console.log(currentResponse);
     }
   
     const goToInputs = () => {
       window.location.href = "/inputs"
+    }
+    
+    const submitForm = (event) => {
+      console.log("SUCCESSSSSSSS");
     }
 
     const testConsole = () => {
@@ -142,23 +142,21 @@ const Input = ( {value, inputState, setInputState} ) => {
               <ComponentHeader componentName={currentInput.label} type="Input" types="Inputs" subType="Response" subTypes="Responses" componentId={currentInput.id} url="/inputs" />
             </div>
           }
-          <form id="formInput" onSubmit={handleSubmit}>
-            <div className="row ml-1"> 
-              <strong>{currentInput.label}</strong>
-              <input
-                type={currentCategory.inputType}
-                className="form-control"
-                id={currentInput.id}
-                placeholder="Insert response here"
-                name={currentInput.label}
-                onChange={handleInputChange}
-                onSubmit={handleSubmit}
-              />
-            </div>  
-          </form>
-          <div>
-            <button className="btn btn-success" onClick={unavailable} />
-          </div>       
+          <div className="row ml-1"> 
+            <strong>{currentInput.label}</strong>
+            <input
+              type={currentCategory.inputType}
+              className="form-control"
+              id={currentInput.id}
+              placeholder="Insert response here"
+              name={currentInput.label}
+              onChange={handleInputChange}
+              onSubmit={submitForm}
+            /><div>
+            <button className="btn btn-success" onClick={handleSubmit} />
+          </div>
+          </div>  
+                 
         </div>
     );
 };

@@ -4,7 +4,6 @@ import CategoryDataService from "./services/CategoryService";
 import { useParams } from 'react-router-dom';
 import Category from "./CategoryComponent";
 import ComponentHeader from "./ComponentHeader"
-import DisplayForm from "./DisplayFormComponent"
 
 
 const Form = () => {
@@ -128,11 +127,12 @@ const Form = () => {
     };
 
     const submitForm = (event) => {
+      event.preventDefault();
       console.log(event)
     }
 
     const unavailable = (name) => {
-      //setMessage(name + " is unavailable at thiss time")
+      //setMessage(name + " is unavailable at this time")
       console.log(formState);
     }
   
@@ -151,31 +151,27 @@ const Form = () => {
           componentId={currentForm.id} 
           url="forms"
         />
-          {/* <div>
-            <DisplayForm />
-          </div> */}
-          <div>
-            {categories && categories.map((category, name, index) => (
-              <div className="container" key={category.id}>
-                <div className="row mb-4  justify-content-center">
-                  <strong className="h4">
-                    ----------{category.name}----------
-                  </strong>
+          <form id="formInput" onSubmit={submitForm}>
+            <div>
+              {categories && categories.map((category, name, index) => (
+                <div className="container" key={category.id}>
+                  <div className="row mb-4  justify-content-center">
+                    <strong className="h4">
+                      ----------{category.name}----------
+                    </strong>
+                  </div>
+                  <Category 
+                    formState={formState} 
+                    setFormState={inputs => 
+                      setFormState({ ...formState, categories: 
+                                  { ...formState.categories, [category.name]: 
+                                  { ...formState.categories[category.name], inputs: 
+                                  inputs } }})} value={category.id}
+                  />
                 </div>
-                <Category 
-                  formCategoryState={formState} 
-                  setFormState={inputs => 
-                    setFormState({ ...formState, categories: 
-                                { ...formState.categories, [category.name]: 
-                                { ...formState.categories[category.name], inputs: 
-                                inputs } }})} 
-                  setCurrentFormCategory={newState => 
-                    setCurrentCategory(newState)} 
-                  value={category.id} 
-                />
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </form>
         <button
           className="btn btn-primary" 
           form='formInput' 

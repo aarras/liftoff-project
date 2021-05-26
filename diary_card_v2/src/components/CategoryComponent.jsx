@@ -7,7 +7,7 @@ import Input from "./InputComponent";
 import PropTypes from "prop-types";
 
 
-const Category = ( {value, categoryId, categoryName, inputType, formCategoryState, setFormState, setCurrentFormCategory} ) => {
+const Category = ( {value, formState, setFormState} ) => {
     const initialCategoryState = {
       id: null,
       name: "",
@@ -17,9 +17,9 @@ const Category = ( {value, categoryId, categoryName, inputType, formCategoryStat
 
     const [currentCategory, setCurrentCategory] = useState(initialCategoryState);
     const [message, setMessage] = useState("");
-    const [task, setTask] = useState("");
 
     const [inputs, setInputs] = useState([]);
+    const [categoryInputs, setCategoryInputs] = useState([]);
     const [currentInput, setCurrentInput] = useState(null);
     const [currentInputIndex, setCurrentInputIndex] = useState(-1);
 
@@ -36,7 +36,6 @@ const Category = ( {value, categoryId, categoryName, inputType, formCategoryStat
         CategoryDataService.get(id)
         .then(response => {
             setCurrentCategory(response.data);
-            unavailable();
         })
         .catch(e => {
           console.log(e);
@@ -46,7 +45,21 @@ const Category = ( {value, categoryId, categoryName, inputType, formCategoryStat
     const retrieveInputsByCategory = (id) => {
         InputDataService.getAllByCategory(id)
           .then(response => {
+            let sentArray = response.data;
+            let newObject = {};
+
+            for (let inp of sentArray) {
+              const addObject = Object.assign(newObject, {
+                [inp.label]: {
+                  id: inp.id,
+                  label: inp.label,
+                  category: inp.category
+                }
+              })
+            }
+            
             setInputs(response.data);
+            setCategoryInputs({ ...categoryInputs, inputs: newObject });
           })
           .catch(e => {
             console.log(e);
@@ -109,10 +122,10 @@ const Category = ( {value, categoryId, categoryName, inputType, formCategoryStat
 
     const unavailable = (event) => {
       //setMessage(" is unavailable at this time");
-      console.log(formCategoryState);
-      setFormState([3, 2, 1]);
-      setCurrentFormCategory(currentCategory);
-      console.log(formCategoryState);
+      console.log(categoryInputs);
+      setFormState({ ...categoryInputs, })
+      //setFormState([3, 2, 1]);
+      console.log(formState);
     }
   
     const goToCategories = () => {
@@ -130,7 +143,15 @@ const Category = ( {value, categoryId, categoryName, inputType, formCategoryStat
             {inputs && inputs.map((input) => (
               <div className="col-3 justify-content-center" key={input.id}>
                 <div className="mb-4 text-center">
-                  <Input inputState={input} setInputState={newState => setFormState({ ...formCategoryState, [input]: newState })} value={input.id} />
+                  <Input 
+                    formState={formState}
+                    inputCategory={currentCategory}
+                    setCategoryInputs={responses => 
+                      setCategoryInputs({ ...categoryInputs, inputs:
+                                        { ...categoryInputs.inputs, [input.name]:
+                                        { ...categoryInputs.inputs[input.name], responses:
+                                          responses }}})} value={input.id}
+                  />
                 </div>
               </div>
             ))}
