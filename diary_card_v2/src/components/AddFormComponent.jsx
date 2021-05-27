@@ -51,7 +51,7 @@ const AddForm = () => {
                 <div>
                     <h5 className="mb-3">New form created successfully!</h5>
                     <button className="btn btn-primary mr-2" onClick={goToForms}>
-                        View Forms
+                        Back To Forms
                     </button>
                     <button className="btn btn-secondary" onClick={newForm}>
                         Create Another
@@ -60,16 +60,17 @@ const AddForm = () => {
             ) : (
                 <div>
                     <div className="form-group">
-                        <label htmlFor="name">Name your form:</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="name"
-                            required
-                            value={form.name}
-                            onChange={handleInputChange}
-                            name="name"
-                        />
+                        <label htmlFor="name">Name your form:
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="name"
+                                required
+                                value={form.name}
+                                onChange={handleInputChange}
+                                name="name"
+                            />
+                        </label>
                     </div>
 
                     <button onClick={saveForm} className="btn btn-primary">

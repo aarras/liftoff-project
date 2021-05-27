@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import InputDataService from './services/InputService';
 import { useParams } from "react-router-dom";
 import CategoryDataService from "./services/CategoryService";
+import InputDataService from './services/InputService';
+import urlMe from './services/urlMe';
 
 
 const AddInput = () => {
@@ -23,8 +24,12 @@ const AddInput = () => {
     const [input, setInput] = useState(initialInputState);
     const [submitted, setsubmitted] = useState(false);
 
-    // Form ID
-    const { id } = useParams();
+    const { formId } = useParams();
+    const { formName } = useParams();
+    const { catId } = useParams();
+    const { catName } = useParams();
+    const { inputId } = useParams();
+    const { inputLabel } = useParams();
 
     const getCategory = id => {
         CategoryDataService.get(id)
@@ -37,8 +42,8 @@ const AddInput = () => {
     };
 
     useEffect(() => {
-        getCategory(id);
-    }, [id]);
+        getCategory(catId);
+    }, []);
 
     const handleInputChange = event => {
         const { name, value } = event.target;
@@ -72,7 +77,7 @@ const AddInput = () => {
     };
 
     const goToCategory = () => {
-        window.location.href = "/category/" + id
+        window.location.href = urlMe("/" + formName + "/" + formId + "/" + catName + "/" + catId + "/");
     }
 
     return (

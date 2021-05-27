@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import FormDataService from "./services/FormService";
 import { Link } from "react-router-dom";
+import urlMe from "./services/urlMe";
 
 
 const FormList = () => {
@@ -63,7 +64,7 @@ const FormList = () => {
     };
 
     const addForm = () => {
-        window.location.href = "/forms/add"
+        window.location.href = "/form/add"
     }
 
     return (
@@ -100,14 +101,15 @@ const FormList = () => {
                         forms.map((form, index) => (
                             <li
                                 className={
-                                    "list-group-item list-group-item-action" + (index === currentIndex ? " active" : "")
+                                    "list-group-item list-group-item-action" + 
+                                    (index === currentIndex ? " active" : "")
                                 }
                                 onClick={() => setActiveForm(form, index)}
                                 key={index}
                             >
                                 {form.name} {index === currentIndex ? 
                                 <Link
-                                to={"/form/" + currentForm.id}
+                                to={urlMe("/" + currentForm.name + "/" + currentForm.id)}
                                 className="badge badge-warning ml-3"
                             >
                                 View Form

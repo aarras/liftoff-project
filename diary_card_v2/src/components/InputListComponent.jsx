@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import InputDataService from "./services/InputService";
-import { Link } from "react-router-dom";
+import urlMe from "./services/urlMe";
 
 const InputList = () => {
     const [inputs, setInputs] = useState([]);
     const [currentInput, setCurrentInput] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(-1);
     const [searchLabel, setSearchLabel] = useState("");
+
+    const { formId } = useParams();
+    const { formName } = useParams();
+    const { catId } = useParams();
+    const { catName } = useParams();
 
     useEffect(() => {
         retrieveInputs();
@@ -62,7 +68,7 @@ const InputList = () => {
     };
 
     const addInput = () => {
-        window.location.href = "/inputs/add"
+        window.location.href = urlMe("/" + formName + "/" + formId + "/" + catName + "/" + catId + "/input/add/")
     }
 
     return (
@@ -107,7 +113,7 @@ const InputList = () => {
                             >
                                 {input.label} {index === currentIndex ? 
                                 <Link
-                                to={"/input/" + currentInput.id}
+                                to={urlMe("/" + formName + "/" + formId + "/" + catName + "/" + catId + "/" + currentInput.label + "/" + currentInput.id + "/")}
                                 className="badge badge-warning ml-3"
                             >
                                 View Input

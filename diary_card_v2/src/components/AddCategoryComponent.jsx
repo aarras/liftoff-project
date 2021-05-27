@@ -28,14 +28,14 @@ const AddCategory = (onSubmit) => {
     const [submitted, setsubmitted] = useState(false);
 
     // Form ID
-    const { id } = useParams();
+    const { formId } = useParams();
 
     Category.propTypes = {
         onSubmit: PropTypes.func
     };
 
-    const getForm = id => {
-        FormDataService.get(id)
+    const getForm = formId => {
+        FormDataService.get(formId)
         .then(response => {
             setCurrentForm(response.data);
         })
@@ -45,8 +45,8 @@ const AddCategory = (onSubmit) => {
     };
 
     useEffect(() => {
-        getForm(id);
-    }, [id]);
+        getForm(formId);
+    }, [formId]);
 
     const handleCategoryChange = event => {
         const { name, value } = event.target;
@@ -113,7 +113,7 @@ const AddCategory = (onSubmit) => {
     };
 
     const goToForm = () => {
-        window.location.href = "/form/" + id
+        window.location.href = "/form/" + formId
     }
 
     return (

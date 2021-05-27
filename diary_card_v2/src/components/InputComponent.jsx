@@ -5,19 +5,9 @@ import { useParams } from 'react-router-dom';
 import ComponentHeader from "./ComponentHeader"
 
 
-const Input = ( {value, inputCategory, formState, setCategoryInputs} ) => {
-    const initialCategoryState = {
-      id: null,
-      name: "",
-      inputType: "",
-      form: null
-    }  
 
-    const initialInputState = {
-      id: null,
-      label: "",
-      category: null
-    };
+const Input = ( {value, formSubmitted, 
+  currentInput, setCurrentInput, formState } ) => {
 
     const initialResponseState = {
       id: null,
@@ -26,16 +16,35 @@ const Input = ( {value, inputCategory, formState, setCategoryInputs} ) => {
       input: null
     }
 
-    const [currentCategory, setCurrentCategory] = useState(initialCategoryState);
+    const [currentResponse, setCurrentResponse] = 
+      useState(initialResponseState);
+    //const [input, setInput] = useState(currentInput);
+    //const [message, setMessage] = useState("");
+    //const [submitted, setSubmitted] = useState(false);
 
-    const [currentInput, setCurrentInput] = useState(initialInputState);
-    const [message, setMessage] = useState("");
+    const { formId } = useParams();
+    const { formName } = useParams();
+    const { catId } = useParams();
+    const { catName } = useParams();
+    const { inputId } = useParams();
+    const { inputName } = useParams();
 
-    const [currentResponse, setCurrentResponse] = useState(initialResponseState);
-    const [submitted, setsubmitted] = useState(false);
+    const chooseSource = () => {
+      let sentInputId = value;
+      let inputId = inputId;
 
-    // Input ID
-    const { id } = useParams();
+      if (sentInputId != null) {
+        return sentInputId;
+      } else return inputId;
+    }
+
+    useEffect(() => {
+      setResponse();
+    }, [currentInput]);
+
+    useEffect(() => {
+      handleSubmit();
+    }, [formSubmitted]);
 
     const getInput = source => {
         InputDataService.get(source)
@@ -47,116 +56,106 @@ const Input = ( {value, inputCategory, formState, setCategoryInputs} ) => {
         });
     };
 
-    const chooseSource = () => {
-      let sentInputId = value;
-      let inputId = id;
-
-      if (sentInputId != null) {
-        return sentInputId;
-      } else return inputId;
+    const setResponse = () => {
+      setCurrentResponse({ ...currentResponse, input: currentInput })
     }
-
-    useEffect(() => {
-      getInput(chooseSource());
-    }, [chooseSource()]);
   
+    // const updateInput = () => {
+    //  InputDataService.update(currentInput.id, currentInput)
+    //     .then(response => {
+    //      console.log(response.data);
+    //       setMessage("The input was updated successfully!");
+    //     })
+    //     .catch(e => {
+    //       console.log(e);
+    //     });
+    // };
+  
+    // const deleteInput = () => {
+    //     InputDataService.remove(currentInput.id)
+    //     .then(response => {
+    //       console.log(response.data);
+    //     window.location.href = "/inputs"
+    //     })
+    //     .catch(e => {
+    //       console.log(e);
+    //     });
+    // }; 
+
     const handleInputChange = event => {
-      const { value } = event.target;
-      setCurrentResponse({ ...currentResponse, response: value });
+      setCurrentResponse({
+        ...currentResponse, response: event.target.value
+      });
     };
-    
-    const updateInput = () => {
-     InputDataService.update(currentInput.id, currentInput)
-        .then(response => {
-         console.log(response.data);
-          setMessage("The input was updated successfully!");
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    };
-  
-    const deleteInput = () => {
-        InputDataService.remove(currentInput.id)
-        .then(response => {
-          console.log(response.data);
-        window.location.href = "/inputs"
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    }; 
 
-    const handleSubmit = (event) => {
-      event.preventDefault();
+    const handleSubmit = () => {
+      
+      if(formSubmitted) {
 
       var dateInMilliSeconds = new Date().getTime();
 
       var data = {
         response: currentResponse.response,
         submissionDate: dateInMilliSeconds,
-        input: currentInput
+        input: currentResponse.input
       };
 
-      console.log(data);
-
-      setCategoryInputs(data);
-
-      // InputResponseDataService.create(data)
-      //   .then(response => {
-      //     setCurrentResponse({
-      //       id: response.data.id,
-      //       response: response.data.response,
-      //       submissionDate: response.data.date,
-      //       input: response.data.input
-      //     });
-      //     setsubmitted(true);
-      //     console.log(response.data);
-      //   })
-      //   .catch(e => {
-      //     console.log(e);
-      //   });
+      InputResponseDataService.create(data)
+        .then(response => {
+          setCurrentResponse({
+            id: response.data.id,
+            response: response.data.response,
+            submissionDate: response.data.date,
+            input: response.data.input
+          });
+          console.log(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+      }
     }
 
-    const unavailable = (label) => {
-      setMessage(label + " is unavailable at this time")
-      console.log(currentResponse);
-    }
+    // const unavailable = (label) => {
+    //   setMessage(label + " is unavailable at this time")
+    // }
   
     const goToInputs = () => {
       window.location.href = "/inputs"
     }
-    
-    const submitForm = (event) => {
-      console.log("SUCCESSSSSSSS");
-    }
-
-    const testConsole = () => {
-      console.log(currentInput);
-    }
 
     return (
         <div>
-          {!value &&
+          {inputId &&
             <div>
-              <ComponentHeader componentName={currentInput.label} type="Input" types="Inputs" subType="Response" subTypes="Responses" componentId={currentInput.id} url="/inputs" />
+              <ComponentHeader 
+                componentName={inputName} 
+                type="Input" 
+                types="Inputs" 
+                subType="Response" 
+                subTypes="Responses" 
+                formName={formName}
+                formId={formId}
+                catName={catName}
+                catId={catId}
+                componentId={inputId} 
+                url="/inputs"
+              />
             </div>
           }
-          <div className="row ml-1"> 
-            <strong>{currentInput.label}</strong>
-            <input
-              type={currentCategory.inputType}
-              className="form-control"
-              id={currentInput.id}
-              placeholder="Insert response here"
-              name={currentInput.label}
-              onChange={handleInputChange}
-              onSubmit={submitForm}
-            /><div>
-            <button className="btn btn-success" onClick={handleSubmit} />
-          </div>
-          </div>  
-                 
+            <div className="row ml-1"> 
+              <strong>{currentInput.label}</strong>
+                  <input
+                    type={currentInput.category.inputType}
+                    className="form-control"
+                    id={currentInput.id}
+                    placeholder="Insert response here"
+                    name={currentInput.label}
+                    onChange={handleInputChange}
+                    onSubmit={handleSubmit}
+                    form='theForm'
+                  />
+            </div>  
         </div>
     );
 };
