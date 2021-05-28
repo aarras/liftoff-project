@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import FormDataService from "./services/FormService";
 import { Link } from "react-router-dom";
 import urlMe from "./services/urlMe";
@@ -14,11 +14,6 @@ const FormList = () => {
         retrieveForms();
     }, []);
 
-    const onChangeSearchName = e => {
-        const searchName = e.target.value;
-        setSearchName(searchName);
-    };
-
     const retrieveForms = () => {
         FormDataService.getAll()
             .then(response => {
@@ -28,6 +23,22 @@ const FormList = () => {
             .catch(e => {
                 console.log(e);
             });
+    };
+    
+    const findByName = () => {
+        FormDataService.findByName(searchName)
+            .then(response => {
+                setForms(response.data);
+                console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    };
+
+    const onChangeSearchName = e => {
+        const searchName = e.target.value;
+        setSearchName(searchName);
     };
 
     const refreshList = () => {
@@ -41,30 +52,8 @@ const FormList = () => {
         setCurrentIndex(index);
     };
 
-    const removeAllForms = () => {
-        FormDataService.removeAll()
-            .then(response => {
-                console.log(response.data);
-                refreshList();
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    };
-
-    const findByName = () => {
-        FormDataService.findByName(searchName)
-            .then(response => {
-                setForms(response.data);
-                console.log(response.data);
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    };
-
     const addForm = () => {
-        window.location.href = "/form/add"
+        window.location.href = urlMe("/form/add")
     }
 
     return (
@@ -109,9 +98,12 @@ const FormList = () => {
                             >
                                 {form.name} {index === currentIndex ? 
                                 <Link
-                                to={urlMe("/" + currentForm.name + "/" + currentForm.id)}
-                                className="badge badge-warning ml-3"
-                            >
+                                    to={urlMe("/" + 
+                                        currentForm.name + "/" + 
+                                        currentForm.id + "/"
+                                    )}
+                                    className="badge badge-warning ml-3"
+                                >
                                 View Form
                             </Link> : ""}
                             </li>

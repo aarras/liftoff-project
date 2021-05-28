@@ -32,28 +32,6 @@ const CategoryList = () => {
             });
     };
 
-    const refreshList = () => {
-        retrieveCategories();
-        setCurrentCategory(null);
-        setCurrentIndex(-1);
-    };
-
-    const setActiveCategory = (category, index) => {
-        setCurrentCategory(category);
-        setCurrentIndex(index);
-    };
-
-    const removeAllCategories = () => {
-        CategoryDataService.removeAll()
-            .then(response => {
-                console.log(response.data);
-                refreshList();
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    };
-
     const findByName = () => {
         CategoryDataService.findByName(searchName)
             .then(response => {
@@ -65,8 +43,33 @@ const CategoryList = () => {
             });
     };
 
+    // const refreshList = () => {
+    //     retrieveCategories();
+    //     setCurrentCategory(null);
+    //     setCurrentIndex(-1);
+    // };
+
+    const setActiveCategory = (category, index) => {
+        setCurrentCategory(category);
+        setCurrentIndex(index);
+    };
+
+    // const removeAllCategories = () => {
+    //     CategoryDataService.removeAll()
+    //         .then(response => {
+    //             console.log(response.data);
+    //             refreshList();
+    //         })
+    //         .catch(e => {
+    //             console.log(e);
+    //         });
+    // };
+
+
     const addCategory = () => {
-        window.location.href = urlMe("/" + formName + "/" + formId +  "/category/add")
+        window.location.href = urlMe("/" + 
+            formName + "/" + 
+            formId +  "/category/add")
     }
 
     return (

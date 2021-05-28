@@ -28,7 +28,7 @@ export const Routes = () => {
       <Route path="/:formName/:formId/:catName/:catId/inputs" exact component={inputList} />
       <Route path="/:formName/:formId" exact component={form} />
       <Route path="/:formName/:formId/:catName/:catId" exact component={category} />
-      <Route path="/:formName/:formId/:catName/:catId/:inputName/:inputId" exact component={input} />
+      <Route path="/:formName/:formId/:catName/:catId/:inputLabel/:inputId/:inputType" exact component={input} />
       <Route path="/form/add" exact component={addForm} />
       <Route path="/:formName/:formId/category/add" exact component={addCategory} />
       <Route path="/:formName/:formId/:catName/:catId/input/add" exact component={addInput} />

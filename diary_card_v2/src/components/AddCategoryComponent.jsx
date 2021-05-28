@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import FormDataService from "./services/FormService";
 import Category from './CategoryComponent';
 import PropTypes from "prop-types";
+import urlMe from "./services/urlMe";
 
 
 const AddCategory = (onSubmit) => {
@@ -23,12 +24,11 @@ const AddCategory = (onSubmit) => {
     };
     
     const [currentForm, setCurrentForm] = useState(initialFormState);
-    
     const [category, setCategory] = useState(initialCategoryState);
     const [submitted, setsubmitted] = useState(false);
 
-    // Form ID
     const { formId } = useParams();
+    const { formName } = useParams();
 
     Category.propTypes = {
         onSubmit: PropTypes.func
@@ -113,7 +113,7 @@ const AddCategory = (onSubmit) => {
     };
 
     const goToForm = () => {
-        window.location.href = "/form/" + formId
+        window.location.href = urlMe(`/${formName}/${formId}`)
     }
 
     return (
@@ -142,7 +142,9 @@ const AddCategory = (onSubmit) => {
                                     onChange={handleCategoryChange}
                                     name="name"
                                 />
-                                <div className="small" style={{color: "red"}}>{category.nameError}</div>
+                                <div className="small" style={{color: "red"}}>
+                                    {category.nameError}
+                                </div>
                             </label>
                         </div>
                         <div className="row">
@@ -163,7 +165,9 @@ const AddCategory = (onSubmit) => {
                                 <option value="text">Text(short)</option>
                                 <option value="textarea">Text Box</option>
                             </select>
-                            <div className="small" style={{color: "red"}}>{category.inputTypeError}</div>
+                            <div className="small" style={{color: "red"}}>
+                                {category.inputTypeError}
+                            </div>
                         </label>
                         </div>
                     </div>

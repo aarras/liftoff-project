@@ -18,38 +18,12 @@ const InputList = () => {
         retrieveInputs();
     }, []);
 
-    const onChangeSearchLabel = e => {
-        const searchLabel = e.target.value;
-        setSearchLabel(searchLabel);
-    };
 
     const retrieveInputs = () => {
         InputDataService.getAll()
             .then(response => {
                 setInputs(response.data);
                 console.log(response.data);
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    };
-
-    const refreshList = () => {
-        retrieveInputs();
-        setCurrentInput(null);
-        setCurrentIndex(-1);
-    };
-
-    const setActiveInput = (input, index) => {
-        setCurrentInput(input);
-        setCurrentIndex(index);
-    };
-
-    const removeAllInputs = () => {
-        InputDataService.removeAll()
-            .then(response => {
-                console.log(response.data);
-                refreshList();
             })
             .catch(e => {
                 console.log(e);
@@ -67,8 +41,39 @@ const InputList = () => {
             });
     };
 
+    const onChangeSearchLabel = e => {
+        const searchLabel = e.target.value;
+        setSearchLabel(searchLabel);
+    };
+
+    const refreshList = () => {
+        retrieveInputs();
+        setCurrentInput(null);
+        setCurrentIndex(-1);
+    };
+
+    const setActiveInput = (input, index) => {
+        setCurrentInput(input);
+        setCurrentIndex(index);
+    };
+
+    // const removeAllInputs = () => {
+    //     InputDataService.removeAll()
+    //         .then(response => {
+    //             console.log(response.data);
+    //             refreshList();
+    //         })
+    //         .catch(e => {
+    //             console.log(e);
+    //         });
+    // };
+
     const addInput = () => {
-        window.location.href = urlMe("/" + formName + "/" + formId + "/" + catName + "/" + catId + "/input/add/")
+        window.location.href = urlMe("/" + 
+            formName + "/" + 
+            formId + "/" + 
+            catName + "/" + 
+            catId + "/input/add/")
     }
 
     return (
@@ -81,7 +86,6 @@ const InputList = () => {
                         placeholder="Search by Label"
                         value={searchLabel}
                         onChange={onChangeSearchLabel}
-                        onBlur={searchLabel}
                     />
                     <div className="input-group-append">
                         <button
@@ -106,16 +110,25 @@ const InputList = () => {
                         inputs.map((input, index) => (
                             <li
                                 className={
-                                    "list-group-item list-group-item-action" + (index === currentIndex ? " active" : "")
+                                    "list-group-item list-group-item-action" + 
+                                    (index === currentIndex ? " active" : "")
                                 }
                                 onClick={() => setActiveInput(input, index)}
                                 key={index}
                             >
                                 {input.label} {index === currentIndex ? 
                                 <Link
-                                to={urlMe("/" + formName + "/" + formId + "/" + catName + "/" + catId + "/" + currentInput.label + "/" + currentInput.id + "/")}
-                                className="badge badge-warning ml-3"
-                            >
+                                    to={urlMe("/" + 
+                                        formName + "/" + 
+                                        formId + "/" + 
+                                        catName + "/" + 
+                                        catId + "/" + 
+                                        currentInput.label + "/" + 
+                                        currentInput.id + "/" +
+                                        currentInput.category.inputType + "/"
+                                    )}
+                                    className="badge badge-warning ml-3"
+                                >
                                 View Input
                             </Link> : ""}
                             </li>

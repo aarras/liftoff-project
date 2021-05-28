@@ -6,7 +6,7 @@ import ComponentHeader from "./ComponentHeader"
 
 
 
-const Input = ( {value, formSubmitted, 
+const Input = ( { formSubmitted, 
   currentInput, setCurrentInput, formState } ) => {
 
     const initialResponseState = {
@@ -18,7 +18,7 @@ const Input = ( {value, formSubmitted,
 
     const [currentResponse, setCurrentResponse] = 
       useState(initialResponseState);
-    //const [input, setInput] = useState(currentInput);
+    const [input, setInput] = useState(null);
     //const [message, setMessage] = useState("");
     //const [submitted, setSubmitted] = useState(false);
 
@@ -27,16 +27,8 @@ const Input = ( {value, formSubmitted,
     const { catId } = useParams();
     const { catName } = useParams();
     const { inputId } = useParams();
-    const { inputName } = useParams();
-
-    const chooseSource = () => {
-      let sentInputId = value;
-      let inputId = inputId;
-
-      if (sentInputId != null) {
-        return sentInputId;
-      } else return inputId;
-    }
+    const { inputLabel } = useParams();
+    const { inputType } = useParams();
 
     useEffect(() => {
       setResponse();
@@ -45,16 +37,23 @@ const Input = ( {value, formSubmitted,
     useEffect(() => {
       handleSubmit();
     }, [formSubmitted]);
+    
+    // const chooseSource = () => {
+    //   if (currentInput != null) {
+    //     return currentInput;
+    //   } else return inputId;
+    // }
 
-    const getInput = source => {
-        InputDataService.get(source)
-        .then(response => {
-          setCurrentInput(response.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    };
+    // const getInput = source => {
+    //     InputDataService.get(source)
+    //     .then(response => {
+    //       setInput(response.data);
+    //       console.log(input);
+    //     })
+    //     .catch(e => {
+    //       console.log(e);
+    //     });
+    // };
 
     const setResponse = () => {
       setCurrentResponse({ ...currentResponse, input: currentInput })
@@ -120,16 +119,16 @@ const Input = ( {value, formSubmitted,
     //   setMessage(label + " is unavailable at this time")
     // }
   
-    const goToInputs = () => {
-      window.location.href = "/inputs"
-    }
+    // const goToInputs = () => {
+    //   window.location.href = "/inputs"
+    // }
 
     return (
         <div>
           {inputId &&
             <div>
               <ComponentHeader 
-                componentName={inputName} 
+                componentName={inputLabel} 
                 type="Input" 
                 types="Inputs" 
                 subType="Response" 
@@ -143,7 +142,8 @@ const Input = ( {value, formSubmitted,
               />
             </div>
           }
-            <div className="row ml-1"> 
+          {currentInput
+            ?<div className="row ml-1"> 
               <strong>{currentInput.label}</strong>
                   <input
                     type={currentInput.category.inputType}
@@ -155,7 +155,21 @@ const Input = ( {value, formSubmitted,
                     onSubmit={handleSubmit}
                     form='theForm'
                   />
-            </div>  
+            </div>
+            :<div className="row ml-1"> 
+              <strong>{inputLabel}</strong>
+                  <input
+                    type={inputType}
+                    className="form-control"
+                    id={inputId}
+                    placeholder="Insert response here"
+                    name={inputLabel}
+                    onChange={handleInputChange}
+                    onSubmit={handleSubmit}
+                    form='theForm'
+              />
+            </div>
+            }
         </div>
     );
 };

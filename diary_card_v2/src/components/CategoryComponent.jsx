@@ -6,14 +6,13 @@ import ComponentHeader from "./ComponentHeader"
 import Input from "./InputComponent";
 
 
-const Category = ( {categoryName, formSubmitted, 
+const Category = ( { formSubmitted, 
   currentCategory, formState } ) => {
 
-  const [category, setCategory] = useState(currentCategory);
-  const [message, setMessage] = useState("");
+  //const [category, setCategory] = useState(currentCategory);
+  //const [message, setMessage] = useState("");
 
   const [inputs, setInputs] = useState([]);
-  const [categoryInputs, setCategoryInputs] = useState([]);
   //const [currentInputIndex, setCurrentInputIndex] = useState(-1);
 
   const { formId } = useParams();
@@ -22,27 +21,24 @@ const Category = ( {categoryName, formSubmitted,
   const { catName } = useParams();
 
   const chooseSource = () => {
-    console.log(currentCategory);
-    console.log(catId);
     if (currentCategory == null) {
       return catId;
     } else return currentCategory.id;
   }
   
   useEffect(() => {
-    retrieveCategoryById(chooseSource())
     retrieveInputsByCategory(chooseSource());
-  }, [], [] );
+  }, [] );
 
-  const retrieveCategoryById = (id) => {
-    CategoryDataService.get(id)
-      .then(response => {
-        setCategory(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
+  // const retrieveCategoryById = (id) => {
+  //   CategoryDataService.get(id)
+  //     .then(response => {
+  //       setCategory(response.data);
+  //     })
+  //     .catch(e => {
+  //       console.log(e);
+  //     });
+  // };
 
   const retrieveInputsByCategory = (id) => {
       InputDataService.getAllByCategory(id)
@@ -94,17 +90,17 @@ const Category = ( {categoryName, formSubmitted,
   //     });
   // };
 
-  const unavailable = (event) => {
-    setMessage(" is unavailable at this time");
-  }
+  // const unavailable = (event) => {
+  //   setMessage(" is unavailable at this time");
+  // }
 
-  const goToCategories = () => {
-    window.location.href = "/categories"
-  }
+  // const goToCategories = () => {
+  //   window.location.href = "/categories"
+  // }
 
   return (
     <div>
-      {!currentCategory &&
+      {catId &&
         <div>
           <ComponentHeader
             componentName={catName}
@@ -119,14 +115,15 @@ const Category = ( {categoryName, formSubmitted,
           />
         </div>
       }
-        <div className="row mb-5 justify-content-center" id='my-form'>
+        <div className="row mb-5 justify-content-center">
           {inputs && inputs.map((input) => (
-            <div className="col-3 justify-content-center" key={input.id} >
+            <div className="col-3 justify-content-center" key={input.id}>
               <div className="mb-4 text-center">
                 <Input
                   currentInput={input}
                   formSubmitted={formSubmitted}
                   formState={formState}
+                  currentCategory={currentCategory}
                 />
               </div>
             </div>
