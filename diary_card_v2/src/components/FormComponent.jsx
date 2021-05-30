@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import FormDataService from "./services/FormService";
 import CategoryDataService from "./services/CategoryService";
-import urlMe from "./services/urlMe";
 import ComponentHeader from "./ComponentHeader"
 import Category from "./CategoryComponent";
 

@@ -19,21 +19,23 @@ import addInput from './pages/addInput'
 export const Routes = () => {
   return (
     <Router>
-      <Route path="/register" exact component={Registration} />
-      <Route path="/login" exact component={Login} />
-      <Route path="/" exact component={home} />
-      <Route path="/home" exact component={home} />
-      <Route path="/forms" exact component={formList} />
-      <Route path="/:formName/:formId/categories" exact component={categoryList} />
-      <Route path="/:formName/:formId/:catName/:catId/inputs" exact component={inputList} />
-      <Route path="/:formName/:formId" exact component={form} />
-      <Route path="/:formName/:formId/:catName/:catId" exact component={category} />
-      <Route path="/:formName/:formId/:catName/:catId/:inputLabel/:inputId/:inputType" exact component={input} />
-      <Route path="/form/add" exact component={addForm} />
-      <Route path="/:formName/:formId/category/add" exact component={addCategory} />
-      <Route path="/:formName/:formId/:catName/:catId/input/add" exact component={addInput} />
-      <Route path="/view-logs" exact component={viewLogs} />
-      <Route path="/graph-data" exact component={graphData} />
+      <Switch>
+        <Route path="/" exact component={home} />
+        <Route path="/register" exact component={Registration} />
+        <Route path="/login" exact component={Login} />
+        <Route path="/home" exact component={home} />
+        <Route path="/forms" exact component={formList} />
+        <Route path="/view-logs" exact component={viewLogs} />
+        <Route path="/graph-data" exact component={graphData} />
+        <Route path="/form/add" exact component={addForm} />
+        <Route path="/:formName/:formId" exact component={form} />
+        <Route path="/:formName/:formId/categories" exact component={categoryList} />
+        <Route path="/:formName/:formId/category/add" exact component={addCategory} />
+        <Route path="/:formName/:formId/:catName/:catId" exact component={category} />
+        <Route path="/:formName/:formId/:catName/:catId/inputs" exact component={inputList} />
+        <Route path="/:formName/:formId/:catName/:catId/input/add" exact component={addInput} />
+        <Route path="/:formName/:formId/:catName/:catId/:inputLabel/:inputId/:inputType" exact component={input} />
+      </Switch>
     </Router>
   )
 }

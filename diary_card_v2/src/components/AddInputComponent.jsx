@@ -6,6 +6,7 @@ import urlMe from './services/urlMe';
 
 
 const AddInput = () => {
+
     const initialInputState = {
         id: null,
         name: "",
@@ -95,7 +96,7 @@ const AddInput = () => {
             ) : (
                 <div>
                     <div className="form-group">
-                        <label htmlFor="name">Name your input:</label>
+                        <label htmlFor="name">Name your input:
                         <input
                             type="text"
                             className="form-control"
@@ -105,8 +106,8 @@ const AddInput = () => {
                             onChange={handleInputChange}
                             name="name"
                         />
+                        </label>
                     </div>
-
                     <button onClick={saveInput} className="btn btn-primary mr-2">
                         Submit
                     </button>

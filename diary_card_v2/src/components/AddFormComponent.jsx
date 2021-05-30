@@ -72,9 +72,11 @@ const AddForm = () => {
                             />
                         </label>
                     </div>
-
-                    <button onClick={saveForm} className="btn btn-primary">
+                    <button onClick={saveForm} className="btn btn-primary mr-2">
                         Submit
+                    </button>
+                    <button onClick={goToForms} className="btn btn-danger">
+                        Cancel
                     </button>
                 </div>
             )}
