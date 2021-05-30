@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 
 
-const OneLog = () => {
+const OneLog = ({ currentForm }) => {
 
     return (
-        <h4>Dat Log</h4>
+        <div className="">
+            <h4>dafuq</h4>
+        </div>
     );
 };
 

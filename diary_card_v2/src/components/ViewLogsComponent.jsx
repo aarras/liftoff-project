@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import FormDataService from "./services/FormService";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
-import Alert from 'react-popup-alert';
+import OneLog from "./OneLogComponent";
 
 
 const ViewLogs = () => {
@@ -33,44 +33,49 @@ const ViewLogs = () => {
             });
     };
 
-    const setActiveForm = event => {
-        const { name, value } = event.target;
-        setCurrentForm(value);
-        onShowAlert();
-        console.log(event.target.value)
+    const getForm = id => {
+        FormDataService.get(id)
+        .then(response => {
+            setCurrentForm(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        });
     };
 
-    const onCloseAlert = () => {
-        setAlert({
-            type:'',
-            text:'',
-            show:false
-        })
-    }
-
-    const onShowAlert = (text) => {
-        setAlert({
-            type:'success',
-            text:text,
-            show:true
-        })
-    }
+    const setActiveForm = event => {
+        getForm(event.target.id);
+    };
 
     return (
-        <div className="row">
-            <DropdownButton id='1' title="Select A Form">
-                {forms && forms.map((form) => (
-                    <Dropdown.Item 
-                        key={form.id}
-                        eventKey={form.id}
-                        onClick={setActiveForm}
-                        value={form.name}
-                    >
-                        {form.name}
-                    </Dropdown.Item>
-                ))}
-            </DropdownButton>
+        <div>
+            <div className="row no-gutters" name="options">
+                <DropdownButton id='1' title="Select A Form">
+                    {forms && forms.map((form) => (
+                        <Dropdown.Item 
+                            id={form.id}
+                            key={form.id}
+                            onClick={setActiveForm}
+                        >
+                            {form.name}
+                        </Dropdown.Item>
+                    ))}
+                </DropdownButton>
+            </div>
+            <div className="container no-gutters">
+                <div className="row no-gutters mt-5 justify-content-center">
+                    {currentForm
+                        ?<div name="responses">
+                            <OneLog currentForm={currentForm} />
+                        </div>
+                        :<div>
+                            <h4 className="">Select a form and date range to display.</h4>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
+
     );
 };
 

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
-import CategoryDataService from "./services/CategoryService";
 import InputDataService from "./services/InputService";
 import ComponentHeader from "./ComponentHeader"
 import Input from "./InputComponent";
 
 
-const Category = ( { formSubmitted, 
-  currentCategory, formState } ) => {
+const Category = ({ formSubmitted, 
+  currentCategory, formState }) => {
 
   //const [category, setCategory] = useState(currentCategory);
   //const [message, setMessage] = useState("");
