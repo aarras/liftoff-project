@@ -5,7 +5,7 @@ import ComponentHeader from "./ComponentHeader"
 import Input from "./InputComponent";
 
 
-const Category = ({ formSubmitted, 
+const Category = ({ formSubmitted, dateSubmitted, 
   currentCategory, formState }) => {
 
   //const [category, setCategory] = useState(currentCategory);
@@ -121,6 +121,7 @@ const Category = ({ formSubmitted,
                 <Input
                   currentInput={input}
                   formSubmitted={formSubmitted}
+                  dateSubmitted={dateSubmitted}
                   formState={formState}
                   currentCategory={currentCategory}
                 />

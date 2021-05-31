@@ -6,7 +6,7 @@ import ComponentHeader from "./ComponentHeader"
 
 
 
-const Input = ( { formSubmitted, 
+const Input = ( { formSubmitted, dateSubmitted,
   currentInput, setCurrentInput, formState } ) => {
 
     const initialResponseState = {
@@ -91,27 +91,25 @@ const Input = ( { formSubmitted,
       
       if(formSubmitted) {
 
-      var dateInMilliSeconds = new Date().getTime();
+        var data = {
+          response: currentResponse.response,
+          submissionDate: dateSubmitted,
+          input: currentResponse.input
+        };
 
-      var data = {
-        response: currentResponse.response,
-        submissionDate: dateInMilliSeconds,
-        input: currentResponse.input
-      };
-
-      InputResponseDataService.create(data)
-        .then(response => {
-          setCurrentResponse({
-            id: response.data.id,
-            response: response.data.response,
-            submissionDate: response.data.date,
-            input: response.data.input
+        InputResponseDataService.create(data)
+          .then(response => {
+            setCurrentResponse({
+              id: response.data.id,
+              response: response.data.response,
+              submissionDate: response.data.date,
+              input: response.data.input
+            });
+            console.log(response.data);
+          })
+          .catch(e => {
+            console.log(e);
           });
-          console.log(response.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
       }
     }
 

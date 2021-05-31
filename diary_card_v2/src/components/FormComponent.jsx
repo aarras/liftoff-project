@@ -18,6 +18,7 @@ const Form = () => {
   //const [message, setMessage] = useState("");
 
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [dateSubmitted, setDateSubmitted] = useState('');
 
   const [categories, setCategories] = useState([]);
   //const [currentCategory, setCurrentCategory] = useState([]);
@@ -115,6 +116,11 @@ const Form = () => {
   const submitForm = (event) => {
     event.preventDefault();
     setFormSubmitted(true);
+    setDateSubmitted(getDate());
+  }
+
+  const getDate = () => {
+    return new Date().getTime();
   }
 
   // const unavailable = (event) => {
@@ -148,6 +154,7 @@ const Form = () => {
                 </div>
                 <Category
                   formSubmitted={formSubmitted}
+                  dateSubmitted={dateSubmitted}
                   currentCategory={category}
                   formState={formState}
                 />

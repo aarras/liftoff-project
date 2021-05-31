@@ -3,7 +3,7 @@ package org.launchcode.diary_card_v2_spring_maven.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.util.Calendar;
 
 @Table(name="inputResponse")
 @Entity
@@ -16,7 +16,7 @@ public class InputResponse {
 
     @NotNull
     @Column(name="submissionDate")
-    private Date submissionDate;
+    private Calendar submissionDate;
 
     @NotBlank
     @Column(name="response")
@@ -26,7 +26,7 @@ public class InputResponse {
     @NotNull
     private Input input;
 
-    public InputResponse(Date submissionDate, String response, Input input) {
+    public InputResponse(Calendar submissionDate, String response, Input input) {
         this.submissionDate = submissionDate;
         this.response = response;
         this.input = input;
@@ -36,11 +36,11 @@ public class InputResponse {
 
     public Long getId() { return id; }
 
-    public Date getSubmissionDate() {
+    public Calendar getSubmissionDate() {
         return submissionDate;
     }
 
-    public void setSubmissionDate(Date submissionDate) {
+    public void setSubmissionDate(Calendar submissionDate) {
         this.submissionDate = submissionDate;
     }
 

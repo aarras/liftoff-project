@@ -8,6 +8,10 @@ const getAllByDate = date => {
     return http.get(`/input-responses?date=${date}`);
 };
 
+const getAllBetweenDates = (formId, startDate, endDate) => {
+    return http.get(`/input-responses-between/${formId}/${startDate}/${endDate}`)
+}
+
 const get = id => {
     return http.get(`/input-response/${id}`);
 }; 
@@ -31,6 +35,7 @@ const removeAll = () => {
 export default {
     getAll,
     getAllByDate,
+    getAllBetweenDates,
     get,
     create,
     update,

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import InputResponseDataService from "./services/InputResponseService";
 import { useParams } from 'react-router-dom';
 
+const InputResponse = () => {
+    
     const [currentInputResponse, setCurrentInputResponse] = useState(initialInputResponseState);
     const [message, setMessage] = useState("");
 
@@ -48,9 +50,9 @@ import { useParams } from 'react-router-dom';
     //     });
     // };
 
-    const goToInputResponses = () => {
-        window.location.href = "/input-responses"
-    }
+    // const goToInputResponses = () => {
+    //     window.location.href = "/input-responses"
+    // }
 
     return (
         <div>

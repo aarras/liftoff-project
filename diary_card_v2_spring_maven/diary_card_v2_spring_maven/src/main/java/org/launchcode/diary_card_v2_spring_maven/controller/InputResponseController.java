@@ -1,6 +1,5 @@
 package org.launchcode.diary_card_v2_spring_maven.controller;
 
-import org.apache.coyote.Response;
 import org.launchcode.diary_card_v2_spring_maven.model.InputResponse;
 import org.launchcode.diary_card_v2_spring_maven.repository.InputRepository;
 import org.launchcode.diary_card_v2_spring_maven.repository.InputResponseRepository;
@@ -8,11 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Calendar;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
@@ -26,12 +24,38 @@ public class InputResponseController {
     public InputRepository inputRepository;
 
     @GetMapping("/input-responses")
-    public ResponseEntity<List<InputResponse>> getAllInputResponsesByDate(@RequestParam(required = false)Date submissionDate) {
+    public ResponseEntity<List<InputResponse>> getAllInputResponsesByDate(@RequestParam(required = false) Calendar submissionDate) {
 
         try {
             List<InputResponse> inputResponses = new ArrayList<InputResponse>();
 
             inputResponseRepository.findBySubmissionDate(submissionDate).forEach(inputResponses::add);
+
+            if (inputResponses.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(inputResponses, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/input-responses-between/{id}/{start-date}/{end-date}")
+    public ResponseEntity<List<InputResponse>> getAllInputResponsesBetweenDates(@PathVariable("id") String id, @PathVariable("start-date") String startDate, @PathVariable("end-date") String endDate) {
+
+        long start = Long.parseLong(startDate);
+        Calendar startCal = Calendar.getInstance();
+        startCal.setTimeInMillis(start);
+
+        long end = Long.parseLong(endDate);
+        Calendar endCal = Calendar.getInstance();
+        endCal.setTimeInMillis(end);
+
+        try {
+            List<InputResponse> inputResponses = new ArrayList<InputResponse>();
+
+            inputResponseRepository.findBySubmissionDateBetween(startCal,endCal).forEach(inputResponses::add);
 
             if (inputResponses.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
