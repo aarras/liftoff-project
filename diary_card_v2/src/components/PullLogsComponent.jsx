@@ -8,7 +8,12 @@ const PullLogs = ({ currentForm, startDate, endDate }) => {
 
     const [logs, setLogs] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [responseByCategory, setResponseByCategory] = useState([])
+    const [dates, setDates] = useState([]);
+    const [inputLabels, setInputLabels] = useState([]);
+    const [inputsByCategory, setInputsByCategory] = useState({});
+    const [logsByDate, setLogsByDate] = useState({});
+    const [categoryCount, setCategoryCount] = useState({});
+    const [catDone, setCatDone] = useState(false);
 
     useEffect(() => {
         retrieveAllByDateBetween(startDate, endDate);
@@ -23,7 +28,7 @@ const PullLogs = ({ currentForm, startDate, endDate }) => {
                                                         endDate)
                 .then(response => {
                     setLogs(response.data);
-                    getCategoriesFromLogs(response.data);
+                    processLogs(response.data);
                     console.log(response.data);
                 })
                 .catch(e => {
@@ -32,60 +37,167 @@ const PullLogs = ({ currentForm, startDate, endDate }) => {
         }
     };
 
-    const getCategoriesFromLogs = (logs) => {
-        var logCategories = [];
-
-        for(let i = 0; i < logs.length; i++) {
-            if(!logCategories.includes(logs[i].input.category.name)) {
-                logCategories.push(logs[i].input.category.name);
-            }
-        }
-        setCategories(logCategories);
-    }
-
     const dateMe = (milliseconds) => {
         const newDate = new Date(1);
         return newDate.setMilliseconds(milliseconds);
     }
 
-    const categorizeResponse = (category) => {
+    const processLogs = (logs) => {
+        var logCategories = [];
+        var logDates = [];
+        var logLabels = [];
+        var getLogsByDate = [];
+        var getInputsByCat = {};
+        let newObject = {};
+        let catCount = {};
+
+
+        for(let i = 0; i < logs.length; i++) {
+            var logDate = logs[i].submissionDate;
+            var catName = logs[i].input.category.name;
+            var log = logs[i];
+
+            if(!catCount[catName]) {
+                Object.assign(catCount, {
+                    [catName]: 0
+                })
+            }
+
+            catCount[catName]++;
+
+            if(!logCategories.includes(logs[i].input.category.name)) {
+                logCategories.push(logs[i].input.category.name);
+            }
+
+            if(!logDates.includes(logs[i].submissionDate)) {
+                logDates.push(logs[i].submissionDate);
+            }
+
+            if(!logLabels.includes(logs[i].input.label)) {
+                logLabels.push(logs[i].input.label);
+            }
+
+            if(!getLogsByDate.includes(logDate)) {
+                getLogsByDate.push(logDate);
+                Object.assign(newObject, {
+                    [logDate]: []
+                })
+                setLogsByDate({ ...logsByDate, [logDate]: []})
+            }
+
+            if(!getInputsByCat[catName]) {
+                Object.assign(getInputsByCat, {
+                    [catName]: []
+                })
+            }
+            getInputsByCat[catName].push(logs[i].input);
+
+
+            newObject.[logDate].push(log);
+        }
+        setCategories(logCategories);
+        setDates(logDates);
+        setInputLabels(logLabels);
+        setLogsByDate(newObject);
+        setCategoryCount(catCount);
+        setInputsByCategory(getInputsByCat);
+    }
+
+    //Filter out logs that don't belong to this category
+    const categorizeResponse = (category, date) => {
         var catLogs = [];
         
         for(let i = 0; i < logs.length; i++) { 
             if(logs[i].input.category.name === category) {
                 catLogs.push(logs[i]);
             }
-            console.log(catLogs);   
         }
-        return catLogs;
+
+        if(!date) {
+            return catLogs;
+        }
+
+        return chronologizeLogs(catLogs, date);
+    }
+
+    //Filter out specific date logs that don't belong to the category
+    const categorizeByDate = (category, date) => {
+        const logsByOneDate = logsByDate[date];
+        var catDateLogs = [];
+
+        for(let i = 0; i < logsByOneDate.length; i++) {
+            if(logsByOneDate[i].input.category.name === category) {
+                catDateLogs.push(logsByOneDate[i]);
+            }
+        }
+        return catDateLogs;
+    }
+
+    const byDateAndInput = (sentLabel) => {
+        const logsByInput = [];
+        
+        for (let i = 0; i < logs.length; i++) {
+
+            if(logs[i].input.label === sentLabel) {
+                logsByInput.push(logs[i].response);
+            }
+        }
+        return logsByInput;
+    }
+
+    //Filter out logs that weren't submitted on this date
+    const chronologizeLogs = (catLogs, date) => {
+        var dateLogs = [];
+
+        for(let i = 0; i < catLogs.length; i++) {
+            if(catLogs[i].submissionDate === date) {
+                dateLogs.push(catLogs[i]);
+            }
+        }
+        return dateLogs;
     }
 
     const fillFirstColumn = (category) => {
         
         const catLogs = categorizeResponse(category);
+        const inputLabels = [];
+
+        for(let i = 0; i < catLogs.length; i++){
+            if(!inputLabels.includes(catLogs[i].input.label)) {
+                inputLabels.push(catLogs[i].input.label);
+            }
+        }
 
         return (
             <>
-                {catLogs.map((catLog) => (
-                <tr key={logs.index}>
-                    <td key={catLog.index}>{catLog.input.label}</td>
+                {inputLabels.map((inputLabel) => (
+                <tr key={inputLabels.index}>
+                    <td key={inputLabels.index}>{inputLabel}</td>
                 </tr>
                 ))}
             </>
         )
     }
 
-    const fillTable = (category) => {
+    const addBlanks = () => {
+        
+        if(catDone) {
+            return <td>-</td>
+        }
+    }
 
-        const catLogs = categorizeResponse(category);
+    const fillTable = (inputLabel) => {
+        const getByDateAndLabel = byDateAndInput(inputLabel);
+        console.log(inputsByCategory);
 
         return (
             <>
-                {catLogs.map((catLog) => (
-                <tr key={logs.index}>
-                    <td key={catLog.index}>{catLog.response}</td>
-                </tr>
+                {getByDateAndLabel && getByDateAndLabel.map((inputLabel) => (
+                    <td key={inputLabel.index}>
+                        {inputLabel}
+                    </td>
                 ))}
+                {addBlanks()}
             </>
         )
     }
@@ -95,18 +207,20 @@ const PullLogs = ({ currentForm, startDate, endDate }) => {
             <div className="row no-gutters">
                 <div className="col-md-auto no-gutters">
                     <Table responsive>
-                        <thead>
-                            <tr>
-                                <th>Input Name</th>
-                            </tr>
-                        </thead>
                         {categories && categories.map((category) => (
-                            <tbody>
-                                <tr>
-                                    <td key={category.index} className="h5">{category}</td>
-                                </tr>
-                                {fillFirstColumn(category)}
-                            </tbody>
+                            <>
+                                <tbody>
+                                        <tr>
+                                            <td key={category.index} 
+                                                className="h5"
+                                            >
+                                                {category}
+                                            </td>
+                                            
+                                        </tr>
+                                    {fillFirstColumn(category)}
+                                </tbody>
+                            </>
                         ))}
                     </Table>
                 </div>
@@ -114,17 +228,21 @@ const PullLogs = ({ currentForm, startDate, endDate }) => {
                     <Table responsive>
                         <thead>
                             <tr>
-                                <th>Date</th>
+                                {dates && dates.map((date) => (
+                                    <th key={date.index}>{date}</th>
+                                ))}
                             </tr>
                         </thead>
-                        {categories && categories.map((category) => (
                             <tbody>
-                                <tr>
-                                    <td key={category.index} className="h5">------------</td>
-                                </tr>
-                                {fillTable(category)}
+                                {inputLabels && inputLabels.map((inputLabel) => (
+                                    <>
+                                        <tr key={inputLabel.index}>
+                                            {fillTable(inputLabel)}
+                                        </tr>
+                                    </>
+                                ))}
+                                
                             </tbody>
-                        ))}
                     </Table>
                 </div>
             </div>
