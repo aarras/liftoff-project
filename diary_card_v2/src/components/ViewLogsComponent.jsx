@@ -85,7 +85,7 @@ const ViewLogs = () => {
                 </div>
             </div>
             <div className="container no-gutters">
-                <div className="row no-gutters mt-5 justify-content-center">
+                <div className="row mt-5">
                     {currentForm
                         ?<div name="responses">
                             <PullLogs
