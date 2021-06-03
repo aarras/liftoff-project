@@ -7,7 +7,7 @@ import ComponentHeader from "./ComponentHeader"
 
 
 const Input = ( { formSubmitted, dateSubmitted,
-  currentInput, setCurrentInput, formState } ) => {
+  currentInput, setCurrentInput, formState, setSuccess } ) => {
 
     const initialResponseState = {
       id: null,
@@ -106,6 +106,7 @@ const Input = ( { formSubmitted, dateSubmitted,
               input: response.data.input
             });
             console.log(response.data);
+            setSuccess(true);
           })
           .catch(e => {
             console.log(e);

@@ -19,6 +19,7 @@ const Form = () => {
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [dateSubmitted, setDateSubmitted] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const [categories, setCategories] = useState([]);
   //const [currentCategory, setCurrentCategory] = useState([]);
@@ -131,18 +132,34 @@ const Form = () => {
     window.location.href = "/forms"
   }
 
+  const viewLogs = () => {
+    window.location.href = "/view-logs"
+  }
+
   return (
     <div>
-      <ComponentHeader 
-        componentName={currentForm.name} 
-        type="Form" 
-        typeName={currentForm.name}
-        types="Forms" 
-        subType="Category" 
-        subTypes="Categories" 
-        componentId={currentForm.id} 
-        url="forms"
-      />
+      {success ? (
+        <div>
+            <h5 className="mb-3">Form submitted successfully!</h5>
+            <button className="btn btn-primary mr-2" onClick={viewLogs} >
+              View Logs
+            </button>
+            <button className="btn btn-secondary" onClick={goToForms}>
+              Back To Forms
+            </button>
+        </div>
+    ) : (
+      <div>
+        <ComponentHeader 
+          componentName={currentForm.name} 
+          type="Form" 
+          typeName={currentForm.name}
+          types="Forms" 
+          subType="Category" 
+          subTypes="Categories" 
+          componentId={currentForm.id} 
+          url="forms"
+        />
         <form onSubmit={submitForm}>
           <div>
             {categories && categories.map((category) => (
@@ -157,22 +174,25 @@ const Form = () => {
                   dateSubmitted={dateSubmitted}
                   currentCategory={category}
                   formState={formState}
+                  setSuccess={setSuccess}
                 />
               </div>
             ))}
           </div>
         </form>
-      <button
-        className="btn btn-primary" 
-        form='formInput' 
-        content='Submit' 
-        value='Submit'
-        type='submit'
-        form='theForm'
-        onClick={submitForm}
-      >
-          Submit Form
-      </button> 
+        <button
+          className="btn btn-primary" 
+          form='formInput' 
+          content='Submit' 
+          value='Submit'
+          type='submit'
+          form='theForm'
+          onClick={submitForm}
+        >
+            Submit Form
+        </button>
+      </div>
+      )}
     </div>
   );
 };

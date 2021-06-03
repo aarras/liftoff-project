@@ -6,7 +6,7 @@ import Input from "./InputComponent";
 
 
 const Category = ({ formSubmitted, dateSubmitted, 
-  currentCategory, formState }) => {
+  currentCategory, formState, setSuccess }) => {
 
   //const [category, setCategory] = useState(currentCategory);
   //const [message, setMessage] = useState("");
@@ -124,6 +124,7 @@ const Category = ({ formSubmitted, dateSubmitted,
                   dateSubmitted={dateSubmitted}
                   formState={formState}
                   currentCategory={currentCategory}
+                  setSuccess={setSuccess}
                 />
               </div>
             </div>
